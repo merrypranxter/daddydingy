@@ -17,6 +17,7 @@
     '.harvest-hit span{margin:3px;padding:2px 5px;background:#39ebef;color:#0e1023;border-radius:3px;pointer-events:none}',
     '.harvest-hit:not(.chosen){background:#fa399839;border-color:#ff578a;border-style:dashed;opacity:.5}',
     '.harvest-hit:not(.chosen) span{background:#ff9ca5}',
+    '.harvest-hit.harvested{border-color:#d5ff4b;opacity:.65;background:#d5ff4b17;cursor:default}',
     '.harvest-manual{position:absolute;inset:0;z-index:5;cursor:crosshair;touch-action:none}',
     '.harvest-drawn{position:absolute;border:2px dashed #ff278e;background:#ff278e33;pointer-events:none;z-index:6}',
     '.harvest-tools{display:grid;gap:9px;align-content:start}',
@@ -38,7 +39,7 @@
     '<label><input id="shFill" type="checkbox" checked> Auto-fill next EMPTY keyboard keys (lowercase first, then SHIFT). Never replace assigned keys.</label>' +
     '<button class="primary" id="shHarvest">✳ HARVEST SELECTED</button><button class="mint" id="shAll">⚡ HARVEST ALL + FILL KEYS</button>' +
     '<button id="shToggle">✎ Draw a custom box</button><button id="shAddBox" disabled>＋ Add drawn design</button>' +
-    '<button id="shAsOne">Import whole SVG as ONE icon</button><button id="shCancel">Skip this sheet</button>' +
+    '<button id="shAsOne">Import whole SVG as ONE icon</button><button id="shCancel">✓ Done with sheet</button>' +
     '<p class="help">Tap numbered designs to include/exclude them. Draw a box if automatic separation missed something. Artwork remains vector — the preview scan only finds white gutters.</p></div></div></div>';
   document.body.append(shell);
   const q = id => shell.querySelector('#' + id);
@@ -53,7 +54,7 @@
   function report() {
     if (!current) return;
     const count = current.selected.size;
-    q('shCount').textContent = count + ' of ' + current.cells.length + ' designs selected';
+    q('shCount').textContent = count + ' selected · ' + current.used.size + ' already harvested · ' + current.cells.length + ' found';
     q('shHarvest').disabled = !count;
   }
   function boxPixels(region) {
@@ -79,10 +80,11 @@
     current.cells.forEach((region, index) => {
       const b = document.createElement('button');
       b.type = 'button';
-      b.className = 'harvest-hit' + (current.selected.has(index) ? ' chosen' : '');
+      b.className = 'harvest-hit' + (current.selected.has(index) ? ' chosen' : '') + (current.used.has(index) ? ' harvested' : '');
+      b.disabled = current.used.has(index);
       b.title = 'Toggle design ' + (index + 1);
       b.setAttribute('aria-pressed', current.selected.has(index) ? 'true' : 'false');
-      b.innerHTML = '<span>' + (index + 1) + '</span>';
+      b.innerHTML = '<span>' + (current.used.has(index) ? '✓' : (index + 1)) + '</span>';
       setBoxStyle(b, region);
       b.onclick = () => {
         if (current.selected.has(index)) current.selected.delete(index);
@@ -170,7 +172,7 @@
   }
   function show(file,text,detected) {
     return new Promise(resolve=>{
-      current = {file,text,resolve,view:detected.view,cells:detected.cells,selected:new Set(detected.cells.map((_,i)=>i)),manualRegion:null};
+      current = {file,text,resolve,view:detected.view,cells:detected.cells,selected:new Set(),used:new Set(),manualRegion:null,manualCount:0};
       q('shSummary').textContent=file.name + ' · ' + detected.columns + ' columns × ' + detected.rows + ' rows · ' + detected.cells.length + ' candidate dings';
       q('shImage').src=detected.src;
       q('shPicture').style.aspectRatio=detected.view.w+' / '+detected.view.h;
@@ -195,7 +197,7 @@
     const all = 'abcdefghijklmnopqrstuvwxyz'.split('').concat(rows.join('').split(''), rows.join('').split('').map(k=>displayKey(k,true)));
     return Array.from(new Set(all)).filter(k=>k!==' ');
   })();
-  function harvest(regions, forceFill) {
+  function harvest(regions, forceFill, closeWhenDone=false) {
     if(!current || !regions.length) return;
     let data;
     try { data=svgToContours(current.text,1200000,3); }
@@ -234,10 +236,18 @@
     state.activeAsset=null;
     render();saveLocal();
     toast(imported+' vector dings harvested · '+assigned+' keyboard keys filled'+(skipped?' · '+skipped+' skipped':'')+'.');
-    if(imported) done();
+    if(imported){
+      current.selected.forEach(i=>current.used.add(i));
+      current.selected.clear();
+      current.manualRegion=null;
+      q('shDrawn').hidden=true;
+      q('shAddBox').disabled=true;
+      if(closeWhenDone) done();
+      else renderRegions();
+    }
   }
   q('shHarvest').onclick=()=> harvest([...current.selected].sort((a,b)=>a-b).map(i=>current.cells[i]),false);
-  q('shAll').onclick=()=> {q('shFill').checked=true;harvest(current.cells,true);};
+  q('shAll').onclick=()=> {q('shFill').checked=true;harvest(current.cells.filter((_,i)=>!current.used.has(i)),true,true);};
   q('shCancel').onclick=done;
   q('shClose').onclick=done;
   q('shAsOne').onclick=async()=>{const f=current.file;await previousLoad([f]);done();};
