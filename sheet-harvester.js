@@ -200,7 +200,7 @@
   function harvest(regions, forceFill, closeWhenDone=false) {
     if(!current || !regions.length) return;
     let data;
-    try { data=svgToContours(current.text,1200000,3); }
+    try { data=current.parsed || (current.parsed=svgToContours(current.text,1200000,3)); }
     catch(e){ toast('Sheet needs simpler SVG outlines: '+e.message);return; }
     const sourceBox=current.view;
     const minx=sourceBox.x,miny=sourceBox.y,maxx=minx+sourceBox.w,maxy=miny+sourceBox.h;
