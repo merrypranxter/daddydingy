@@ -246,7 +246,7 @@ render();
     '.harvest-picture img{display:block;width:100%;height:100%;pointer-events:none}',
     '.harvest-hit{position:absolute;border:2px solid #39ccde;background:#19e6f51a;color:#10212e;padding:0;border-radius:0;display:flex;align-items:flex-start;justify-content:flex-start;font:bold 13px sans-serif;min-width:0;overflow:hidden}',
     '.harvest-hit span{margin:3px;padding:2px 5px;background:#39ebef;color:#0e1023;border-radius:3px;pointer-events:none}',
-    '.harvest-hit:not(.chosen){background:#fa399839;border-color:#ff578a;border-style:dashed;opacity:.5}',
+    '.harvest-hit:not(.chosen){background:transparent;border-color:#ff578a;border-style:dashed;opacity:.72}',
     '.harvest-hit:not(.chosen) span{background:#ff9ca5}',
     '.harvest-hit.harvested{border-color:#d5ff4b;opacity:.65;background:#d5ff4b17;cursor:default}',
     '.harvest-manual{position:absolute;inset:0;z-index:5;cursor:crosshair;touch-action:none}',
@@ -257,7 +257,8 @@ render();
     '.harvest-tools input{accent-color:#ff4bd4}',
     '.harvest-tools .help{font-size:12px;line-height:1.45}',
     '.harvest-choice{color:#d5ff4b;font-weight:800;font-size:13px}',
-    '@media(max-width:700px){.harvest-work{grid-template-columns:1fr}.harvest-tools{grid-template-columns:repeat(2,minmax(0,1fr))}.harvest-tools .help,.harvest-tools label,.harvest-choice{grid-column:1/-1}.harvest-dialog{padding:10px;max-height:97dvh}}'
+    '.harvest-mobile{display:none}',
+    '@media(max-width:700px){.harvest-backdrop{padding:6px;align-items:stretch}.harvest-dialog{height:calc(100dvh - 12px);max-height:calc(100dvh - 12px);padding:10px;overflow-y:auto;overscroll-behavior:contain}.harvest-head{position:relative;z-index:10;background:#180e2b}.harvest-head h2{font-size:20px}.harvest-head p{margin-bottom:5px}.harvest-mobile{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px;position:sticky;top:0;background:#180e2b;padding:7px 0;z-index:20}.harvest-mobile .harvest-choice{grid-column:1/-1}.harvest-mobile button{padding:8px 5px;font-size:12px}.harvest-work{display:flex;flex-direction:column;gap:9px}.harvest-picture{width:min(100%,calc(53dvh * var(--sheet-ratio, .66)));max-width:100%;flex-shrink:0}.harvest-tools{width:100%;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}.harvest-tools .help,.harvest-tools label{grid-column:1/-1}.harvest-tools #shHarvest,.harvest-tools #shAll,.harvest-tools #shCount{display:none}.harvest-tools button{font-size:12px;padding:8px 5px}}'
   ].join('\n');
   document.head.append(style);
   const shell = document.createElement('div');
@@ -265,6 +266,7 @@ render();
   shell.hidden = true;
   shell.innerHTML = '<div class="harvest-dialog" role="dialog" aria-modal="true" aria-label="SVG sheet harvester">' +
     '<div class="harvest-head"><div><h2>✂ THE SHEET HARVESTER</h2><p id="shSummary">One sheet. Many dings. No individual SVG exports.</p></div><button id="shClose" aria-label="Close sheet">✕</button></div>' +
+    '<div class="harvest-mobile"><div class="harvest-choice" id="shMobileCount">0 selected</div><button class="primary" id="shMobileHarvest">✳ Harvest selected</button><button class="mint" id="shMobileAll">⚡ Harvest all + fill</button></div>' +
     '<div class="harvest-work"><div class="harvest-picture" id="shPicture"><img id="shImage" alt="Full vector sheet"><div id="shRegions"></div><div class="harvest-manual" id="shManual" hidden></div><div class="harvest-drawn" id="shDrawn" hidden></div></div>' +
     '<div class="harvest-tools"><div class="harvest-choice" id="shCount">0 selected</div>' +
     '<label><input id="shFill" type="checkbox" checked> Auto-fill next EMPTY keyboard keys (lowercase first, then SHIFT). Never replace assigned keys.</label>' +
@@ -286,6 +288,9 @@ render();
     if (!current) return;
     const count = current.selected.size;
     q('shCount').textContent = count + ' selected · ' + current.used.size + ' already harvested · ' + current.cells.length + ' found';
+    q('shMobileCount').textContent=q('shCount').textContent;
+    q('shMobileHarvest').disabled=!count;
+    q('shMobileAll').disabled=current.used.size===current.cells.length;
     q('shHarvest').disabled = !count;
   }
   function boxPixels(region) {
@@ -354,12 +359,33 @@ render();
     const threshold = Math.max(5,Math.floor(size*.045));
     return joined.filter(r => r[1]-r[0]>=threshold);
   }
-  function partitions(runs, max) {
-    if (!runs.length) return [[0,max]];
-    return runs.map((r,i) => [
-      i ? Math.floor((runs[i-1][1]+r[0])/2) : 0,
-      i < runs.length-1 ? Math.ceil((r[1]+runs[i+1][0])/2) : max
-    ]);
+  // Sheet rows/columns should be balanced. Using each ink run's arbitrary width
+  // made the middle column absurdly narrow on asymmetric concentric designs.
+  // Place dividers near equal cell spacing, nudging them into actual white gutters.
+  function partitions(runs, max, counts, other) {
+    const n = runs.length;
+    if (!n) return [[0,max]];
+    if (n === 1) return [[0,max]];
+    const step=max/n, cuts=[0];
+    const prefix=new Float64Array(max+1);
+    for(let x=0;x<max;x++) prefix[x+1]=prefix[x]+counts[x];
+    const spread=Math.max(2,Math.round(max*.003));
+    for(let i=1;i<n;i++){
+      const ideal=Math.round(step*i), radius=Math.max(4,Math.round(step*.36));
+      const lower=Math.max(cuts[cuts.length-1]+3, ideal-radius);
+      const upper=Math.min(max-(n-i)*3, ideal+radius);
+      let best=ideal, lowest=Infinity;
+      for(let x=lower;x<=upper;x++){
+        const l=Math.max(0,x-spread),r=Math.min(max,x+spread+1);
+        const inkFraction=(prefix[r]-prefix[l])/((r-l)*other);
+        const locationPenalty=.055*Math.pow((x-ideal)/radius,2);
+        const score=inkFraction*6+locationPenalty;
+        if(score<lowest){lowest=score;best=x;}
+      }
+      cuts.push(best);
+    }
+    cuts.push(max);
+    return cuts.slice(0,-1).map((from,i)=>[from,cuts[i+1]]);
   }
   async function scanSheet(svg) {
     const view = getRootView(svg);
@@ -388,7 +414,7 @@ render();
       }
     }
     const xr=bands(xs,height,width),yr=bands(ys,width,height);
-    const columns=partitions(xr,width),rows=partitions(yr,height);
+    const columns=partitions(xr,width,xs,height),rows=partitions(yr,height,ys,width);
     let cells=[];
     if(columns.length <= 15 && rows.length <= 25 && columns.length * rows.length <= 180){
       for(const yb of rows)for(const xb of columns){
@@ -407,6 +433,7 @@ render();
       q('shSummary').textContent=file.name + ' · ' + detected.columns + ' columns × ' + detected.rows + ' rows · ' + detected.cells.length + ' candidate dings';
       q('shImage').src=detected.src;
       q('shPicture').style.aspectRatio=detected.view.w+' / '+detected.view.h;
+      q('shPicture').style.setProperty('--sheet-ratio',String(detected.view.w/detected.view.h));
       q('shFill').checked = true;
       q('shToggle').textContent='✎ Draw a custom box';
       q('shManual').hidden=true;
@@ -479,6 +506,8 @@ render();
   }
   q('shHarvest').onclick=()=> harvest([...current.selected].sort((a,b)=>a-b).map(i=>current.cells[i]),false);
   q('shAll').onclick=()=> {q('shFill').checked=true;harvest(current.cells.filter((_,i)=>!current.used.has(i)),true,true);};
+  q('shMobileHarvest').onclick=()=>q('shHarvest').click();
+  q('shMobileAll').onclick=()=>q('shAll').click();
   q('shCancel').onclick=done;
   q('shClose').onclick=done;
   q('shAsOne').onclick=async()=>{const f=current.file;await previousLoad([f]);done();};
