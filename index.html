@@ -258,7 +258,7 @@ render();
     '.harvest-tools .help{font-size:12px;line-height:1.45}',
     '.harvest-choice{color:#d5ff4b;font-weight:800;font-size:13px}',
     '.harvest-mobile{display:none}',
-    '@media(max-width:700px){.harvest-backdrop{padding:6px;align-items:stretch}.harvest-dialog{height:calc(100dvh - 12px);max-height:calc(100dvh - 12px);padding:10px;overflow-y:auto;overscroll-behavior:contain}.harvest-head{position:relative;z-index:10;background:#180e2b}.harvest-head h2{font-size:20px}.harvest-head p{margin-bottom:5px}.harvest-mobile{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px;position:sticky;top:0;background:#180e2b;padding:7px 0;z-index:20}.harvest-mobile .harvest-choice{grid-column:1/-1}.harvest-mobile button{padding:8px 5px;font-size:12px}.harvest-work{display:flex;flex-direction:column;gap:9px}.harvest-picture{width:min(100%,calc(53dvh * var(--sheet-ratio, .66)));max-width:100%;flex-shrink:0}.harvest-tools{width:100%;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}.harvest-tools .help,.harvest-tools label{grid-column:1/-1}.harvest-tools #shHarvest,.harvest-tools #shAll,.harvest-tools #shCount{display:none}.harvest-tools button{font-size:12px;padding:8px 5px}}'
+    '@media(max-width:700px){.harvest-backdrop{padding:6px;align-items:stretch}.harvest-dialog{height:calc(100dvh - 12px);max-height:calc(100dvh - 12px);padding:10px;overflow-y:auto;overscroll-behavior:contain}.harvest-head{position:relative;z-index:10;background:#180e2b}.harvest-head h2{font-size:20px}.harvest-head p{margin-bottom:5px}.harvest-mobile{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px;position:sticky;top:0;background:#180e2b;padding:7px 0;z-index:20}.harvest-mobile .harvest-choice{grid-column:1/-1}.harvest-mobile button{padding:8px 5px;font-size:12px}.harvest-work{display:flex;flex-direction:column;gap:9px}.harvest-picture{width:100%;max-width:100%;flex-shrink:0}.harvest-tools{width:100%;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}.harvest-tools .help,.harvest-tools label{grid-column:1/-1}.harvest-tools #shHarvest,.harvest-tools #shAll,.harvest-tools #shCount{display:none}.harvest-tools button{font-size:12px;padding:8px 5px}}'
   ].join('\n');
   document.head.append(style);
   const shell = document.createElement('div');
@@ -427,6 +427,16 @@ render();
     if(!cells.length) cells=[view];
     return {src,view,cells,columns:columns.length,rows:rows.length};
   }
+  function fitMobileSheet() {
+    if(!current) return;
+    const picture=q('shPicture');
+    if(window.innerWidth>700){picture.style.width='';return;}
+    const ratio=current.view.w/current.view.h;
+    // Numeric pixel fit avoids unsupported CSS math in iOS webviews.
+    const height=Math.max(320, window.innerHeight || document.documentElement.clientHeight || 700);
+    picture.style.width=Math.min(window.innerWidth-38,Math.max(75,height*.53*ratio))+'px';
+  }
+  window.addEventListener('resize',fitMobileSheet);
   function show(file,text,detected) {
     return new Promise(resolve=>{
       current = {file,text,resolve,view:detected.view,cells:detected.cells,selected:new Set(),used:new Set(),manualRegion:null,manualCount:0};
@@ -440,6 +450,7 @@ render();
       q('shDrawn').hidden=true;
       q('shAddBox').disabled=true;
       shell.hidden=false;
+      fitMobileSheet();
       renderRegions();
     });
   }
