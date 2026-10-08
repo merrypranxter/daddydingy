@@ -27,6 +27,14 @@ Single-design SVG imports still work as before; manual keyboard stamping remains
 
 Everything runs in your browser. No AI API, backend, uploads to a server, or account required.
 
+## ✨ High-fidelity font export
+
+Daddy Dingy now writes its TrueType outlines on a **4096-unit grid** instead of rounding every ornament to 1000 font units. The same keyboard mapping and glyph sizing are retained, but fine counters, tight curves, and small decorative details survive export with about four times the coordinate precision.
+
+**Important:** You must **export a NEW .ttf from your editable project or original SVGs** to benefit. An already-exported low-detail .ttf cannot regain missing outlines just by enlarging the font size in SparkleBae.
+
+In SparkleBae, give the regenerated font a **new family name** (for example, `Astral Trash Dings HD`), then load that fresh file. This avoids accidentally selecting the older font with the same name. The higher precision improves outlines; details smaller than the font's rendering resolution, unsupported SVG effects, and features already flattened away by sheet extraction may still be absent.
+
 ## Illustrator SVG tips
 
 - Export **solid filled paths**, ideally black on white, with generous whitespace between independent ornaments.
