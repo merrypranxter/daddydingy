@@ -1,6 +1,0 @@
-{
-  "name": "Daddy Dingy",
-  "description": "A simple personal dingbat foundry.",
-  "requestFramePermissions": [],
-  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
-}

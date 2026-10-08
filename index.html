@@ -1,18 +1,232 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Daddy Dingy</title>
-    <meta name="description" content="A simple personal dingbat foundry." />
-    <meta property="og:title" content="Daddy Dingy" />
-    <meta property="og:description" content="A simple personal dingbat foundry." />
-    <meta property="og:type" content="website" />
-    <meta name="twitter:card" content="summary_large_image" />
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
-  </body>
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Daddy Dingy — your personal dingbat foundry</title>
+<style>
+:root{color-scheme:dark;--bg:#10091f;--panel:#1b1030;--panel2:#26163f;--line:#51416f;--pink:#ff4bd4;--aqua:#43f0ed;--lime:#d5ff4b;--gold:#ffbc58;--fg:#fbf5ff;--muted:#beaed2}*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 12% -15%,#49205b 0,transparent 39%),radial-gradient(circle at 92% 110%,#0d4752 0,transparent 40%),var(--bg);color:var(--fg);font:15px/1.5 system-ui,-apple-system,Segoe UI,sans-serif;min-height:100vh}button,input,textarea{font:inherit}button{cursor:pointer;border:1px solid var(--line);border-radius:10px;background:#312047;color:var(--fg);padding:9px 13px;font-weight:700}button:hover{border-color:var(--aqua)}button:focus-visible,input:focus-visible{outline:3px solid var(--aqua);outline-offset:2px}button:disabled{opacity:.35;cursor:default}input[type=text],input[type=number]{background:#0e0820;color:#fff;border:1px solid var(--line);border-radius:8px;padding:9px 11px;min-width:0}input[type=range]{accent-color:var(--pink);width:100%}input[type=file]{display:none}small,.help{color:var(--muted)}.app{max-width:1510px;margin:0 auto;padding:22px}.header{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:22px}.eyebrow{color:var(--aqua);text-transform:uppercase;letter-spacing:.22em;font-size:11px;font-weight:850}h1{font-size:clamp(2.1rem,4.5vw,4.8rem);letter-spacing:-.075em;line-height:.98;margin:3px 0 8px;font-weight:1000;text-shadow:3px 3px 0 #632b6e}h1 span{color:var(--pink)}.tagline{margin:0;color:var(--muted)}.actions{display:flex;gap:8px;flex-wrap:wrap;align-items:center}.primary{background:linear-gradient(115deg,#ff40cf,#f84b87);border-color:transparent;color:#18091e}.mint{background:var(--aqua);color:#102032;border-color:transparent}.lime{background:var(--lime);color:#201327;border-color:transparent}.outline{background:transparent}.pagegrid{display:grid;grid-template-columns:295px minmax(400px,1fr) 315px;gap:15px;align-items:start}.panel{border:1px solid var(--line);background:linear-gradient(145deg,#211331,#170d2a);box-shadow:0 9px 35px #06030f6b;border-radius:17px;min-width:0;overflow:hidden}.panel-head{padding:18px 18px 11px;display:flex;justify-content:space-between;align-items:center;gap:8px}.panel-head h2{margin:0;font-size:18px;letter-spacing:-.03em}.count{color:var(--lime);font-weight:800;font-size:12px}.panel-content{padding:0 16px 17px}.drop{border:2px dashed #765793;border-radius:14px;background:#28183e;text-align:center;padding:19px 12px;margin-bottom:12px;cursor:pointer;transition:.15s}.drop:hover,.drop.drag{border-color:var(--aqua);background:#23414b}.drop b{display:block;color:var(--aqua)}.drop small{display:block}.svg-list{max-height:550px;overflow:auto;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.svg-tile{position:relative;min-width:0;min-height:110px;border:1px solid var(--line);background:#110b1e;border-radius:12px;padding:9px;color:#fff;text-align:center;cursor:pointer}.svg-tile.active{border:2px solid var(--aqua);background:#2e3048}.svg-tile img{width:68px;height:68px;object-fit:contain;filter:grayscale(1) brightness(0) invert(1)}.svg-tile .name{display:block;font-size:11px;white-space:nowrap;text-overflow:ellipsis;overflow:hidden}.svg-tile .bad{font-size:10px;color:var(--gold)}.remove-icon{position:absolute;right:3px;top:3px;width:22px;height:22px;line-height:15px;padding:1px;border-radius:100%;background:#4b1e3f;border:0}.stack{display:flex;gap:8px;flex-wrap:wrap}.stack button{font-size:12px}.keyboard{padding:4px 0 8px}.keyrow{display:flex;justify-content:center;gap:5px;margin-bottom:7px}.key{min-width:0;flex:1 1 0;height:67px;padding:3px;border:1px solid #64507b;border-radius:9px;background:#281938;position:relative;overflow:hidden}.key:hover{transform:translateY(-1px)}.key.used{background:#382245;border-color:#bd69c6}.key.selected{outline:3px solid var(--aqua);outline-offset:0;z-index:2}.key .symbol{height:38px;display:block}.key svg{width:100%;height:36px;max-width:100%;fill:#fff}.key .letter{font-size:11px;font-weight:900;color:var(--lime);position:absolute;bottom:3px;right:6px}.key.wide{flex:1.55 1 0}.key.spacerkey{flex:5 1 0}.mode{display:inline-flex;background:#100920;border:1px solid var(--line);border-radius:11px;padding:3px;gap:3px}.mode button{border:none;background:transparent;font-size:12px;padding:7px 10px}.mode button.active{background:var(--pink);color:#1e0828}.hint{font-size:12px;color:var(--muted);margin:3px 0 14px}.type-test{margin-top:15px;border-top:1px solid var(--line);padding-top:14px}.type-test input{width:100%;margin:9px 0}.test-strip{display:flex;align-items:center;min-height:75px;border:1px dashed #685682;background:#100c1b;border-radius:11px;overflow:auto;padding:7px}.sample-char{display:inline-flex;align-items:center;justify-content:center;min-width:48px;width:48px;height:57px}.sample-char svg{width:49px;height:55px;fill:#fff}.sample-char.missing{color:#7d7290}.workbench{border:1px solid var(--line);background:#100b20;border-radius:13px;padding:13px}.stage-svg{width:100%;display:block;aspect-ratio:1/1;max-height:340px;touch-action:none;cursor:grab}.stage-svg:active{cursor:grabbing}.canvas-info{display:flex;justify-content:space-between;gap:10px;font-size:11px;color:var(--muted);margin-top:6px}.sliders{margin-top:14px;display:grid;gap:11px}.slider-label{display:flex;justify-content:space-between;align-items:center;font-size:13px;font-weight:700;gap:9px}.slider-label output{color:var(--aqua);font-variant-numeric:tabular-nums}.tiny{font-size:12px;padding:6px 8px}.footer{margin:17px 1px 8px;font-size:12px;color:var(--muted)}.status{position:fixed;left:50%;bottom:16px;transform:translateX(-50%);max-width:min(620px,90vw);border:1px solid var(--aqua);background:#142731;color:#fff;border-radius:12px;box-shadow:0 8px 28px #0009;padding:12px 16px;z-index:100;pointer-events:none;opacity:0;transition:opacity .25s}.status.show{opacity:1}.warning{color:var(--gold)}.dot{width:9px;height:9px;border-radius:100%;display:inline-block;background:var(--lime);margin-right:6px}.empty{border:1px dashed var(--line);border-radius:10px;padding:19px 13px;text-align:center;font-size:12px;color:var(--muted)}.hidden{display:none!important}.info-banner{background:#272038;border:1px solid #533c64;padding:10px 12px;border-radius:11px;font-size:12px;color:#dfd1f2;margin-bottom:15px}.info-banner b{color:var(--lime)}@media(max-width:1180px){.pagegrid{grid-template-columns:260px 1fr}.editor{grid-column:1 / -1}.editgrid{display:grid;grid-template-columns:minmax(200px,330px) 1fr;gap:16px}.sliders{margin-top:0}.svg-list{max-height:450px}}@media(max-width:700px){.app{padding:12px}.pagegrid{grid-template-columns:1fr}.editor{grid-column:auto}.editgrid{display:block}.sliders{margin-top:14px}.svg-list{grid-template-columns:repeat(3,minmax(0,1fr));max-height:220px}.keyrow{gap:3px;margin-bottom:5px}.key{height:56px;padding:2px;border-radius:5px}.key .symbol{height:32px}.key svg{height:31px}.key .letter{font-size:9px;right:3px}.panel-head{padding:14px 13px 9px}.panel-content{padding:0 12px 13px}h1{font-size:2.5rem}.header{margin-bottom:12px}}
+</style>
+</head>
+<body>
+<main class="app">
+<header class="header"><div><div class="eyebrow">ASTRAL TRASH TOOLS / personal font laboratory</div><h1>DADDY <span>DINGY</span> ✳</h1><p class="tagline">Your SVGs. Your keyboard. Your beautiful little mutant font.</p></div><div class="actions"><button id="saveProject">↡ Save project</button><button id="loadProject">↟ Open project</button><button class="primary" id="exportFont">✦ EXPORT .TTF</button></div></header>
+<div class="info-banner"><span class="dot"></span>Everything runs <b>inside your browser</b>. Your files aren't uploaded anywhere. SVG fills become solid font shapes; stroke-only lines and clipping masks should be expanded in Illustrator first.</div>
+<div class="pagegrid">
+<section class="panel"><div class="panel-head"><h2>01 / THE PILE</h2><span class="count" id="assetCount">0 SVGs</span></div><div class="panel-content"><div class="drop" id="drop"><b>⊕ DROP SVGs HERE</b><small>or tap to select a whole batch</small></div><div class="stack" style="margin-bottom:12px"><button id="demo" class="tiny">✳ Load demo dings</button><button id="clearAll" class="tiny">Clear all</button></div><div id="assetList" class="svg-list"></div><p class="hint">Select an icon here, then click any key to assign it. Same icon can occupy multiple keys.</p></div></section>
+<section class="panel"><div class="panel-head"><h2>02 / KEYBOARD CHAOS</h2><div class="mode" role="group" aria-label="Keyboard layer"><button id="normalMode" class="active">normal</button><button id="shiftMode">SHIFT</button></div></div><div class="panel-content"><p class="hint" id="keyHint">Click a key to edit it. Pick an icon from the left first to stamp it onto a key.</p><div id="keyboard" class="keyboard"></div><div class="stack" style="justify-content:space-between;align-items:center;margin-top:6px"><span class="count" id="slotCount">0 keys assigned</span><button class="tiny" id="unassign">✕ Empty selected key</button></div><div class="type-test"><label class="slider-label" for="testText"><span>03 / TEST YOUR NONSENSE</span><span class="help">live glyph preview</span></label><input id="testText" type="text" value="Sparkle Bae 123!" maxlength="48" placeholder="Type random shit here"><div class="test-strip" id="testStrip"></div></div><div class="footer">Want A and a to be different shapes? Use the SHIFT layer. A shifted key is a separate glyph, not an automatic copy.</div></div></section>
+<section class="panel editor"><div class="panel-head"><h2>04 / GLYPH SURGERY</h2><span class="count" id="selectedName">Choose a key</span></div><div class="panel-content editgrid"><div class="workbench"><svg class="stage-svg" id="stage" viewBox="0 0 1000 1000" xmlns="http://www.w3.org/2000/svg" aria-label="Drag glyph to reposition"><rect x="0" y="0" width="1000" height="1000" fill="#f7f5ed"/><rect x="65" y="55" width="870" height="870" fill="none" stroke="#c8c0d1" stroke-width="2" stroke-dasharray="8 9"/><path d="M0 800H1000" stroke="#e562a0" stroke-width="3" stroke-dasharray="14 9"/><path d="M500 0V1000" stroke="#d5cddc" stroke-width="2" stroke-dasharray="7 15"/><path id="stageGlyph" d="" fill="#160d22" fill-rule="nonzero"/></svg><div class="canvas-info"><span>↔ drag to position</span><span>pink = baseline</span></div></div><div><div class="sliders"><label><div class="slider-label"><span>Size</span><output id="sizeOut">100%</output></div><input type="range" id="size" min="20" max="230" value="100" step="1"></label><label><div class="slider-label"><span>Horizontal</span><output id="xOut">0</output></div><input type="range" id="x" min="-350" max="350" value="0" step="1"></label><label><div class="slider-label"><span>Vertical</span><output id="yOut">0</output></div><input type="range" id="y" min="-350" max="350" value="0" step="1"></label><label><div class="slider-label"><span>Rotate</span><output id="rotationOut">0°</output></div><input type="range" id="rotation" min="-180" max="180" value="0" step="1"></label></div><div class="stack" style="margin-top:13px"><button id="resetGlyph" class="tiny">↺ Reset position</button><button id="copyMapping" class="tiny">Copy key map</button></div><p class="hint" id="editorInfo" style="margin-top:12px">Adjust each key independently, or drag directly on the canvas.</p><label for="fontName" class="slider-label" style="margin-top:14px">FONT NAME</label><input id="fontName" type="text" value="Astral Trash Dings" maxlength="40" style="width:100%;margin-top:6px" autocomplete="off"></div></div></section>
+</div><footer class="footer">DADDY DINGY v1.0 · Real TrueType outlines · projects save as JSON · black-and-white glyphs only · no account, no server, no common sense required.</footer>
+<input id="svgFiles" type="file" multiple accept=".svg,image/svg+xml"><input id="projectFile" type="file" accept=".json,application/json"><div class="status" id="status" role="status" aria-live="polite"></div>
+</main>
+<script>
+'use strict';
+// Entire project is local-first and dependency-free. The TTF encoder is implemented below.
+const $ = id => document.getElementById(id), NS = 'http://www.w3.org/2000/svg';
+const state = {assets:[],slots:{},activeAsset:null,selectedKey:'a',shift:false,fontName:'Astral Trash Dings'};
+const rows = ['1234567890-=', 'qwertyuiop[]\\', "asdfghjkl;'", 'zxcvbnm,./'];
+const shiftMap = {'1':'!','2':'@','3':'#','4':'$','5':'%','6':'^','7':'&','8':'*','9':'(','0':')','-':'_','=':'+', '[':'{',']':'}','\\':'|',';':':',"'":'"',',':'<','.':'>','/':'?'};
+const displayKey = (base, shift) => shift ? (shiftMap[base] || base.toUpperCase()) : base;
+const keyLabel = ch => ch===' ' ? 'SPACE' : ch;
+const clamp=(x,min,max)=>Math.max(min,Math.min(max,x));
+let idCounter=0,saveTimer=null,statusTimer=null,dragStart=null;
+function toast(s){const n=$('status'); n.textContent=s;n.classList.add('show');clearTimeout(statusTimer);statusTimer=setTimeout(()=>n.classList.remove('show'),3400)}
+function esc(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&apos;'}[c]));}
+function fmt(n){return Number(n.toFixed(2));}
+function saveLocal(){clearTimeout(saveTimer);saveTimer=setTimeout(()=>{try{localStorage.setItem('daddy-dingy-project-v1',JSON.stringify({version:1,assets:state.assets.map(a=>({id:a.id,name:a.name,svg:a.svg})),slots:state.slots,fontName:state.fontName}));}catch(e){console.warn('Autosave limit reached',e)}},600)}
+function download(data,name,type){const blob=data instanceof Blob?data:new Blob([data],{type});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download=name;document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),120000);}
+const identity=()=>[1,0,0,1,0,0];
+function matMul(a,b){return [a[0]*b[0]+a[2]*b[1],a[1]*b[0]+a[3]*b[1],a[0]*b[2]+a[2]*b[3],a[1]*b[2]+a[3]*b[3],a[0]*b[4]+a[2]*b[5]+a[4],a[1]*b[4]+a[3]*b[5]+a[5]];}
+function ptMat(p,m){return {x:p.x*m[0]+p.y*m[2]+m[4],y:p.x*m[1]+p.y*m[3]+m[5]};}
+function transformAttr(str=''){
+ let result=identity();const r=/([a-zA-Z]+)\s*\(([^)]*)\)/g;let x;
+ while((x=r.exec(str))){const v=(x[2].match(/[-+]?(?:\d*\.)?\d+(?:e[-+]?\d+)?/ig)||[]).map(Number);let t=identity();
+ switch(x[1].toLowerCase()){
+ case 'matrix':if(v.length===6)t=v;break;case 'translate':t=[1,0,0,1,v[0]||0,v[1]||0];break;
+ case 'scale':t=[v[0]??1,0,0,v[1]??v[0]??1,0,0];break;
+ case 'rotate':{const ang=(v[0]||0)*Math.PI/180,c=Math.cos(ang),s=Math.sin(ang);t=[c,s,-s,c,0,0];if(v.length>=3)t=matMul(matMul([1,0,0,1,v[1],v[2]],t),[1,0,0,1,-v[1],-v[2]]);break;}
+ case 'skewx':t=[1,0,Math.tan((v[0]||0)*Math.PI/180),1,0,0];break;
+ case 'skewy':t=[1,Math.tan((v[0]||0)*Math.PI/180),0,1,0,0];break;
+ }
+ result=matMul(result,t);
+ }return result;
+}
+function distanceLine(p,a,b){const dx=b.x-a.x,dy=b.y-a.y;const d=Math.hypot(dx,dy);return d<1e-9?Math.hypot(p.x-a.x,p.y-a.y):Math.abs(dx*(a.y-p.y)-(a.x-p.x)*dy)/d;}
+function curveFlatten(p0,p1,p2,p3,out,tol,depth=0){
+ if(depth>=14||Math.max(distanceLine(p1,p0,p3),distanceLine(p2,p0,p3))<=tol){out.push(p3);return;}
+ const m=(a,b)=>({x:(a.x+b.x)/2,y:(a.y+b.y)/2});const a=m(p0,p1),b=m(p1,p2),c=m(p2,p3),d=m(a,b),e=m(b,c),f=m(d,e);
+ curveFlatten(p0,a,d,f,out,tol,depth+1);curveFlatten(f,e,c,p3,out,tol,depth+1);
+}
+function quadFlatten(p0,p1,p2,out,tol){const c1={x:p0.x+2*(p1.x-p0.x)/3,y:p0.y+2*(p1.y-p0.y)/3},c2={x:p2.x+2*(p1.x-p2.x)/3,y:p2.y+2*(p1.y-p2.y)/3};curveFlatten(p0,c1,c2,p2,out,tol);}
+function arcFlatten(from,to,rx,ry,phi,large,sweep,out,tol){
+ rx=Math.abs(rx);ry=Math.abs(ry);if(rx<1e-8||ry<1e-8){out.push(to);return;}
+ phi=phi*Math.PI/180;const cos=Math.cos(phi),sin=Math.sin(phi),dx=(from.x-to.x)/2,dy=(from.y-to.y)/2;
+ const xp=cos*dx+sin*dy,yp=-sin*dx+cos*dy;let lam=xp*xp/(rx*rx)+yp*yp/(ry*ry);if(lam>1){const k=Math.sqrt(lam);rx*=k;ry*=k;}
+ const aa=rx*rx*yp*yp+ry*ry*xp*xp,bb=rx*rx*ry*ry-aa;
+ const f=((large===sweep)?-1:1)*Math.sqrt(Math.max(0,bb)/Math.max(aa,1e-15));
+ const cxp=f*rx*yp/ry,cyp=-f*ry*xp/rx,cx=cos*cxp-sin*cyp+(from.x+to.x)/2,cy=sin*cxp+cos*cyp+(from.y+to.y)/2;
+ function angle(ux,uy,vx,vy){return Math.atan2(ux*vy-uy*vx,ux*vx+uy*vy)}
+ const ux=(xp-cxp)/rx,uy=(yp-cyp)/ry,vx=(-xp-cxp)/rx,vy=(-yp-cyp)/ry;
+ let theta=Math.atan2(uy,ux),delta=angle(ux,uy,vx,vy);if(!sweep&&delta>0)delta-=2*Math.PI;if(sweep&&delta<0)delta+=2*Math.PI;
+ const maxRadius=Math.max(rx,ry);const step=Math.max(.025,Math.min(Math.PI/8,2*Math.acos(clamp(1-tol/Math.max(maxRadius,1),-1,1))));
+ const count=clamp(Math.ceil(Math.abs(delta)/step),1,1500);
+ for(let k=1;k<=count;k++){const a=theta+delta*k/count;out.push({x:cx+rx*Math.cos(a)*cos-ry*Math.sin(a)*sin,y:cy+rx*Math.cos(a)*sin+ry*Math.sin(a)*cos});}
+ out[out.length-1]=to;
+}
+function parsePath(d,tol){
+ const tokens=d.match(/[AaCcHhLlMmQqSsTtVvZz]|[-+]?(?:\d*\.)?\d+(?:[Ee][-+]?\d+)?/g)||[];
+ const nargs={M:2,L:2,H:1,V:1,C:6,S:4,Q:4,T:2,A:7,Z:0};let idx=0,cmd='',p={x:0,y:0},start={x:0,y:0},lastC=null,lastQ=null,contour=[],all=[];
+ const hasNum=()=>idx<tokens.length&&!/^[a-zA-Z]$/.test(tokens[idx]);
+ const finish=()=>{if(contour.length>1){if(Math.hypot(contour[0].x-contour[contour.length-1].x,contour[0].y-contour[contour.length-1].y)<tol*1.5)contour.pop();if(contour.length>=3)all.push(contour)}contour=[];};
+ let safety=0;
+ while(idx<tokens.length&&++safety<300000){if(/^[a-zA-Z]$/.test(tokens[idx]))cmd=tokens[idx++];else if(!cmd){idx++;continue;}
+ const op=cmd.toUpperCase(),relative=cmd!==op,n=nargs[op];if(n===undefined)break;
+ if(op==='Z'){finish();p={...start};lastC=lastQ=null;cmd='';continue;}
+ if(idx+n>tokens.length||!Array.from({length:n},(_,i)=>tokens[idx+i]).every(t=>!isNaN(Number(t))))break;
+ const v=tokens.slice(idx,idx+n).map(Number);idx+=n;
+ const vpt=(x,y)=>({x:x+(relative?p.x:0),y:y+(relative?p.y:0)});
+ const before={...p};let np={...p};
+ if(op==='M'){finish();np=vpt(v[0],v[1]);start={...np};contour.push(np);cmd=relative?'l':'L';}
+ else if(op==='L') {np=vpt(v[0],v[1]);contour.push(np);}
+ else if(op==='H'){np={x:v[0]+(relative?p.x:0),y:p.y};contour.push(np);}
+ else if(op==='V'){np={x:p.x,y:v[0]+(relative?p.y:0)};contour.push(np);}
+ else if(op==='C'){const c1=vpt(v[0],v[1]),c2=vpt(v[2],v[3]);np=vpt(v[4],v[5]);curveFlatten(before,c1,c2,np,contour,tol);lastC=c2;lastQ=null;}
+ else if(op==='S'){const c1=lastC?{x:2*p.x-lastC.x,y:2*p.y-lastC.y}:{...p},c2=vpt(v[0],v[1]);np=vpt(v[2],v[3]);curveFlatten(before,c1,c2,np,contour,tol);lastC=c2;lastQ=null;}
+ else if(op==='Q'){const c=vpt(v[0],v[1]);np=vpt(v[2],v[3]);quadFlatten(before,c,np,contour,tol);lastQ=c;lastC=null;}
+ else if(op==='T'){const c=lastQ?{x:2*p.x-lastQ.x,y:2*p.y-lastQ.y}:{...p};np=vpt(v[0],v[1]);quadFlatten(before,c,np,contour,tol);lastQ=c;lastC=null;}
+ else if(op==='A'){np=vpt(v[5],v[6]);arcFlatten(before,np,v[0],v[1],v[2],!!v[3],!!v[4],contour,tol);lastC=lastQ=null;}
+ if(!['C','S','Q','T'].includes(op)){lastC=null;lastQ=null;}
+ p=np;
+ }
+ finish();return all;
+}
+function polygon(points){return points.trim().split(/[\s,]+/).map(Number).reduce((a,n,i,ar)=>{if(i%2===0&&Number.isFinite(n)&&Number.isFinite(ar[i+1]))a.push({x:n,y:ar[i+1]});return a},[])}
+function ellipse(cx,cy,rx,ry,tol){if(rx<=0||ry<=0)return [];let n=clamp(Math.ceil(2*Math.PI*Math.sqrt((rx*rx+ry*ry)/2)/Math.sqrt(8*Math.max(tol,.001))),24,1000);return Array.from({length:n},(_,i)=>{const a=2*Math.PI*i/n;return {x:cx+Math.cos(a)*rx,y:cy+Math.sin(a)*ry}})}
+function numberAttr(el,n,def=0){const v=parseFloat(el.getAttribute(n));return Number.isFinite(v)?v:def;}
+function cleanSVG(text){if(text.length>3_000_000)throw Error('That SVG is enormous (3 MB limit).');const doc=new DOMParser().parseFromString(text,'image/svg+xml');if(doc.querySelector('parsererror')||doc.documentElement.tagName.toLowerCase()!=='svg')throw Error('Not a valid SVG file.');return doc;}
+function svgToContours(svg){
+ const doc=cleanSVG(svg),root=doc.documentElement,view=(root.getAttribute('viewBox')||'').split(/[\s,]+/).map(Number);
+ const tol=Math.max(.09,(view.length===4?Math.max(view[2],view[3]):1000)/1600);
+ const byId=new Map();doc.querySelectorAll('[id]').forEach(n=>byId.set(n.id,n));
+ const cssRules=[];doc.querySelectorAll('style').forEach(s=>{const re=/([^{}]+)\{([^}]*)\}/g;let m;while((m=re.exec(s.textContent))){cssRules.push([m[1].trim(),m[2].trim()]);}});
+ const getStyle=(el,parent)=>{let rules='';for(const [sel,txt] of cssRules){for(const part of sel.split(',')){const q=part.trim();if(q.startsWith('.')&&el.classList.contains(q.slice(1))||q.startsWith('#')&&el.id===q.slice(1)||q.toLowerCase()===el.tagName.toLowerCase()){rules+=';'+txt;break;}}}
+ const style=rules+';'+(el.getAttribute('style')||'');const css=(name)=>{const m=style.match(new RegExp('(?:^|;)\\s*'+name+'\\s*:\\s*([^;]+)','i'));return m?m[1].trim():null};
+ return {fill:el.getAttribute('fill')??css('fill')??parent.fill,display:el.getAttribute('display')??css('display')??parent.display,visibility:el.getAttribute('visibility')??css('visibility')??parent.visibility,opacity:parseFloat(el.getAttribute('opacity')??css('opacity')??parent.opacity),rule:el.getAttribute('fill-rule')??css('fill-rule')??parent.rule,stroke:el.getAttribute('stroke')??css('stroke')??parent.stroke};};
+ const list=[];let skippedStrokes=0,unsupported=0;
+ function visit(el,parentMatrix,parentStyle,seen=new Set(),inUse=false){
+ const tag=el.localName?.toLowerCase()||'',sty=getStyle(el,parentStyle);
+ if(sty.display==='none'||sty.visibility==='hidden'||sty.opacity===0)return;
+ if(['script','style','title','desc','metadata','clippath','mask','pattern','lineargradient','radialgradient','filter'].includes(tag))return;
+ if(['defs','symbol'].includes(tag)&&!inUse)return;
+ let m=matMul(parentMatrix,transformAttr(el.getAttribute('transform')||''));
+ if(tag==='use'){
+ const href=el.getAttribute('href')||el.getAttribute('xlink:href')||'';const name=href.startsWith('#')?href.slice(1):'';
+ if(name&&byId.has(name)&&!seen.has(name)){const nx=new Set(seen);nx.add(name);m=matMul(m,[1,0,0,1,numberAttr(el,'x'),numberAttr(el,'y')]);visit(byId.get(name),m,sty,nx,true);}return;
+ }
+ let paths=[];
+ if(tag==='path')paths=parsePath(el.getAttribute('d')||'',tol);
+ else if(tag==='rect'){const x=numberAttr(el,'x'),y=numberAttr(el,'y'),w=numberAttr(el,'width'),h=numberAttr(el,'height');if(w>0&&h>0){const rx=clamp(numberAttr(el,'rx',numberAttr(el,'ry')),0,w/2),ry=clamp(numberAttr(el,'ry',rx),0,h/2);if(rx&&ry){const d=`M ${x+rx} ${y} L ${x+w-rx} ${y} A ${rx} ${ry} 0 0 1 ${x+w} ${y+ry} L ${x+w} ${y+h-ry} A ${rx} ${ry} 0 0 1 ${x+w-rx} ${y+h} L ${x+rx} ${y+h} A ${rx} ${ry} 0 0 1 ${x} ${y+h-ry} L ${x} ${y+ry} A ${rx} ${ry} 0 0 1 ${x+rx} ${y} Z`;paths=parsePath(d,tol);}else paths=[[{x,y},{x:x+w,y},{x:x+w,y:y+h},{x,y:y+h}]];}}
+ else if(tag==='circle'){const e=ellipse(numberAttr(el,'cx'),numberAttr(el,'cy'),numberAttr(el,'r'),numberAttr(el,'r'),tol);if(e.length)paths=[e];}
+ else if(tag==='ellipse'){const e=ellipse(numberAttr(el,'cx'),numberAttr(el,'cy'),numberAttr(el,'rx'),numberAttr(el,'ry'),tol);if(e.length)paths=[e];}
+ else if(tag==='polygon'||tag==='polyline'){const e=polygon(el.getAttribute('points')||'');if(e.length>=3)paths=[e];}
+ else if(tag==='text'||tag==='image'||tag==='foreignobject'){unsupported++;}
+ if(paths.length){if(String(sty.fill).trim().toLowerCase()==='none'){if(sty.stroke&&sty.stroke!=='none')skippedStrokes++;}else for(const contour of paths){const pts=contour.map(p=>ptMat(p,m)).filter(p=>Number.isFinite(p.x)&&Number.isFinite(p.y));if(pts.length>=3)list.push({points:pts,evenOdd:sty.rule==='evenodd'});}}
+ // A <defs> reached through <use> is allowed; regular <defs> is not.
+ for(const child of el.children||[])visit(child,m,sty,seen,inUse);
+ }
+ visit(root,identity(),{fill:'#000',display:'inline',visibility:'visible',opacity:1,rule:'nonzero',stroke:'none'});
+ if(!list.length)throw Error('No filled vector shapes found. Outline your Illustrator strokes/text and export as SVG.');
+ if(list.reduce((a,c)=>a+c.points.length,0)>120000)throw Error('SVG too detailed for a dingbat (more than 120k points). Simplify paths first.');
+ return {contours:list,warnings:[skippedStrokes?'Ignored '+skippedStrokes+' stroke-only shape(s)':'',unsupported?'Ignored '+unsupported+' image/text element(s)':''].filter(Boolean)};
+}
+function bbox(contours){let x0=Infinity,y0=Infinity,x1=-Infinity,y1=-Infinity;for(const c of contours)for(const p of c.points){x0=Math.min(x0,p.x);y0=Math.min(y0,p.y);x1=Math.max(x1,p.x);y1=Math.max(y1,p.y)}return {x0,y0,x1,y1,w:x1-x0,h:y1-y0};}
+function toGlyph(slot){
+ const asset=state.assets.find(a=>a.id===slot.id);if(!asset)return [];
+ const b=asset.box;if(!b||!b.w||!b.h)return [];
+ const fit=Math.min(770/b.w,700/b.h)*slot.scale/100;
+ const midX=(b.x0+b.x1)/2,midY=(b.y0+b.y1)/2;
+ const phi=slot.rotation*Math.PI/180,c=Math.cos(phi),s=Math.sin(phi);
+ const raw=asset.contours.map(entry=>({evenOdd:entry.evenOdd,points:entry.points.map(p=>{
+ const x=(p.x-midX)*fit,y=-(p.y-midY)*fit;
+ return {x:Math.round(500+slot.x+x*c-y*s),y:Math.round(375+slot.y+x*s+y*c)};
+ }).filter(p=>Number.isFinite(p.x)&&Number.isFinite(p.y))})).filter(k=>k.points.length>=3);
+ // TTF uses non-zero winding: orient nested contours alternately to preserve holes.
+ function signedArea(pts){let a=0;for(let i=0;i<pts.length;i++){const p=pts[i],q=pts[(i+1)%pts.length];a+=p.x*q.y-q.x*p.y;}return a/2;}
+ function inside(p,poly){let v=false;for(let i=0,j=poly.length-1;i<poly.length;j=i++){const a=poly[i],b=poly[j];if((a.y>p.y)!==(b.y>p.y)&&p.x<(b.x-a.x)*(p.y-a.y)/(b.y-a.y)+a.x)v=!v;}return v;}
+ for(let i=0;i<raw.length;i++){
+ const a=raw[i],area=signedArea(a.points);if(Math.abs(area)<2)continue;
+ // Don't reverse overlapping independent objects. Only wholly nested contours matter.
+ const probe=a.points[0];let depth=0;
+ for(let j=0;j<raw.length;j++)if(i!==j&&Math.abs(signedArea(raw[j].points))>Math.abs(area)*1.01&&inside(probe,raw[j].points))depth++;
+ const shouldClockwise=depth%2===0; // in y-up coordinates, outer clockwise = negative area
+ if((area<0)!==shouldClockwise)a.points.reverse();
+ }
+ return raw.map(r=>r.points);
+}
+function contourPath(contours){return contours.map(pts=>pts.map((p,i)=>(i?'L':'M')+p.x+' '+(800-p.y)).join(' ')+' Z').join(' ');}
+function miniature(ch){if(ch===' ')return '<span class="sample-char"></span>';
+ const slot=state.slots[ch];if(!slot)return `<span class="sample-char missing">${esc(ch)}</span>`;
+ const d=contourPath(toGlyph(slot));return `<span class="sample-char"><svg viewBox="0 0 1000 1000" aria-label="${esc(ch)}"><path d="${d}" /></svg></span>`;}
+function renderAssets(){const el=$('assetList');el.innerHTML='';for(const asset of state.assets){const tile=document.createElement('div');tile.setAttribute('role','button');tile.tabIndex=0;tile.className='svg-tile'+(asset.id===state.activeAsset?' active':'');tile.title=asset.name;const data='data:image/svg+xml;charset=utf-8,'+encodeURIComponent(asset.svg);const img=document.createElement('img');img.src=data;img.alt='';const label=document.createElement('span');label.className='name';label.textContent=asset.name;const remove=document.createElement('button');remove.className='remove-icon';remove.title='Remove icon from library and all keys';remove.type='button';remove.textContent='×';remove.onclick=e=>{e.stopPropagation();state.assets=state.assets.filter(a=>a.id!==asset.id);for(const k of Object.keys(state.slots))if(state.slots[k].id===asset.id)delete state.slots[k];if(state.activeAsset===asset.id)state.activeAsset=null;render();saveLocal();};tile.append(img,label);if(asset.warnings.length){const warn=document.createElement('span');warn.className='bad';warn.textContent='⚠ partial import';warn.title=asset.warnings.join(' · ');tile.append(warn);}tile.append(remove);tile.onclick=()=>{state.activeAsset=asset.id;renderAssets();$('keyHint').textContent='Icon armed! Click any key to stamp '+asset.name+' onto it.';toast('Armed: '+asset.name+' · click a keyboard key');};tile.onkeydown=e=>{if(e.target===tile&&(e.key==='Enter'||e.key===' ')){e.preventDefault();tile.click();}};el.append(tile);}if(!state.assets.length)el.innerHTML='<div class="empty" style="grid-column:1/-1">Your icon pile is empty. Feed the goblin some SVGs.</div>';$('assetCount').textContent=state.assets.length+' SVG'+(state.assets.length===1?'':'s');}
+function renderKeyboard(){let html='';for(const row of rows){html+='<div class="keyrow">';for(const base of row){const ch=displayKey(base,state.shift),sel=ch===state.selectedKey,slot=state.slots[ch];html+=`<button class="key${sel?' selected':''}${slot?' used':''}" type="button" data-key="${esc(ch)}" title="Key ${esc(ch)}"><span class="symbol">${slot?`<svg viewBox="0 0 1000 1000"><path fill="white" d="${contourPath(toGlyph(slot))}" /></svg>`:''}</span><span class="letter">${esc(ch)}</span></button>`;}html+='</div>';}
+ const spaceSlot=state.slots[' '];html+=`<div class="keyrow"><button class="key spacerkey${state.selectedKey===' '?' selected':''}${spaceSlot?' used':''}" type="button" data-key=" " title="Space"><span class="symbol">${spaceSlot?`<svg viewBox="0 0 1000 1000"><path d="${contourPath(toGlyph(spaceSlot))}"/></svg>`:''}</span><span class="letter">SPACE</span></button></div>`;
+ $('keyboard').innerHTML=html;document.querySelectorAll('[data-key]').forEach(btn=>btn.onclick=()=>pickKey(btn.dataset.key));$('slotCount').textContent=Object.keys(state.slots).length+' keys assigned';$('normalMode').classList.toggle('active',!state.shift);$('shiftMode').classList.toggle('active',state.shift);
+}
+function pickKey(k){state.selectedKey=k;if(state.activeAsset){state.slots[k]={id:state.activeAsset,x:0,y:0,scale:100,rotation:0};state.activeAsset=null;$('keyHint').textContent='Stamped '+keyLabel(k)+'. Select another icon to assign it elsewhere.';saveLocal();}render();}
+function renderEditor(){const k=state.selectedKey,slot=state.slots[k];$('selectedName').textContent='Key: '+keyLabel(k);$('stageGlyph').setAttribute('d',slot?contourPath(toGlyph(slot)):'');$('editorInfo').textContent=slot?'Drag the symbol in the preview, or fine-tune its position below.':'No icon on this key yet. Pick an SVG, then click this key.';for(const name of ['size','x','y','rotation']){$(name).disabled=!slot;const v=slot?(name==='size'?slot.scale:slot[name]):(name==='size'?100:0);$(name).value=v;$(name==='size'?'sizeOut':name==='rotation'?'rotationOut':name+'Out').textContent=v+(name==='size'?'%':name==='rotation'?'°':'');}}
+function renderPreview(){$('testStrip').innerHTML=Array.from($('testText').value).map(miniature).join('')||'<span class="help">Type to preview your dingbats.</span>';}
+function render(){renderAssets();renderKeyboard();renderEditor();renderPreview();$('fontName').value=state.fontName;}
+function editSlot(prop,value){const slot=state.slots[state.selectedKey];if(!slot)return;slot[prop]=Number(value);renderKeyboard();renderEditor();renderPreview();saveLocal();}
+async function loadSVGFiles(files){let count=0;for(const file of Array.from(files)){if(!/\.svg$/i.test(file.name)&&file.type!=='image/svg+xml')continue;try{const text=await file.text(),data=svgToContours(text),newId='g'+(++idCounter);state.assets.push({id:newId,name:file.name.replace(/\.svg$/i,''),svg:text,contours:data.contours,box:bbox(data.contours),warnings:data.warnings});count++;}catch(e){toast('Could not import '+file.name+': '+e.message);}}render();saveLocal();if(count)toast('Imported '+count+' SVG'+(count===1?'':'s')+' — select one, then click a key.');}
+function saveProject(){const data=JSON.stringify({version:1,assets:state.assets.map(a=>({id:a.id,name:a.name,svg:a.svg})),slots:state.slots,fontName:state.fontName},null,2);download(data,(state.fontName||'dingbats').replace(/[^\w-]+/g,'-')+'.glyphgoblin.json','application/json');toast('Editable project saved. Your keys and SVGs are inside.');}
+async function openProject(file){try{const d=JSON.parse(await file.text());if(d.version!==1||!Array.isArray(d.assets)||typeof d.slots!=='object')throw Error('Not a Daddy Dingy project.');const assets=[];for(const a of d.assets){const converted=svgToContours(a.svg);assets.push({id:String(a.id),name:String(a.name),svg:a.svg,contours:converted.contours,box:bbox(converted.contours),warnings:converted.warnings});}
+ state.assets=assets;const ids=new Set(assets.map(a=>a.id));state.slots={};for(const [k,s] of Object.entries(d.slots))if(k.length===1&&ids.has(s.id)){state.slots[k]={id:s.id,x:clamp(Number(s.x)||0,-350,350),y:clamp(Number(s.y)||0,-350,350),scale:clamp(Number(s.scale)||100,20,230),rotation:clamp(Number(s.rotation)||0,-180,180)};}
+ state.fontName=String(d.fontName||'Astral Trash Dings').slice(0,40);state.activeAsset=null;idCounter=assets.reduce((n,a)=>Math.max(n,Number(a.id.slice(1))||0),idCounter);render();saveLocal();toast('Project loaded · '+assets.length+' vectors · '+Object.keys(state.slots).length+' keys.');
+ }catch(e){toast('Project would not open: '+e.message);}}
+// ---- Tiny dependency-free, standards-compliant TrueType font writer ----
+class Buf{constructor(){this.a=[]}u8(x){this.a.push(x&255)}u16(x){this.u8(x>>8);this.u8(x)}i16(x){this.u16(x)}u32(x){this.u8(x>>>24);this.u8(x>>>16);this.u8(x>>>8);this.u8(x)}i32(x){this.u32(x)}tag(s){for(let i=0;i<4;i++)this.u8(s.charCodeAt(i)||32)}bytes(a){this.a.push(...a)}zeros(n){for(let i=0;i<n;i++)this.u8(0)}pad4(){while(this.a.length%4)this.u8(0)}get length(){return this.a.length}data(){return new Uint8Array(this.a)}}
+function ttfTableHead(stats){const w=new Buf(),now=BigInt(Math.round(Date.now()/1000))+2082844800n;w.u32(0x00010000);w.u32(0x00010000);w.u32(0);w.u32(0x5F0F3CF5);w.u16(3);w.u16(1000);for(let i=0;i<2;i++){w.u32(Number((now>>32n)&0xffffffffn));w.u32(Number(now&0xffffffffn));}for(const n of [stats.x0,stats.y0,stats.x1,stats.y1])w.i16(n);w.u16(0);w.u16(8);w.i16(2);w.i16(1);w.i16(0);return w.data()}
+function ttfTableHhea(glyphs,stats){const w=new Buf();w.u32(0x00010000);w.i16(Math.max(800,stats.y1));w.i16(Math.min(-200,stats.y0));w.i16(0);w.u16(1000);w.i16(Math.min(...glyphs.map(g=>g.xMin)));w.i16(Math.min(...glyphs.map(g=>g.advance-(g.xMax-g.xMin)-g.xMin)));w.i16(Math.max(...glyphs.map(g=>g.xMax)));w.i16(1);w.i16(0);w.i16(0);w.zeros(8);w.i16(0);w.u16(glyphs.length);return w.data()}
+function ttfTableMaxp(glyphs){const w=new Buf();w.u32(0x00010000);w.u16(glyphs.length);w.u16(Math.max(...glyphs.map(g=>g.points)));w.u16(Math.max(...glyphs.map(g=>g.contours.length)));w.u16(0);w.u16(0);w.u16(1);for(let i=0;i<8;i++)w.u16(0);return w.data()}
+function ttfTableOS2(codes,stats){const w=new Buf();w.u16(0);w.i16(1000);w.u16(400);w.u16(5);w.u16(0);w.i16(650);w.i16(600);w.i16(0);w.i16(75);w.i16(650);w.i16(600);w.i16(0);w.i16(75);w.i16(45);w.i16(200);w.i16(0);w.zeros(10);for(let i=0;i<4;i++)w.u32(0);w.tag('ASTR');w.u16(0x0040);w.u16(Math.min(...codes));w.u16(Math.max(...codes));w.i16(Math.max(800,stats.y1));w.i16(Math.min(-200,stats.y0));w.i16(0);w.u16(Math.max(800,stats.y1));w.u16(Math.max(200,-stats.y0));return w.data()}
+function ttfTablePost(){const w=new Buf();w.u32(0x00030000);w.i32(0);w.i16(-75);w.i16(50);for(let i=0;i<5;i++)w.u32(0);return w.data()}
+function ttfTableName(name){const family=name.trim().replace(/[<>\x00-\x1f]/g,'').slice(0,40)||'Goblin Dings',ps=family.replace(/[^A-Za-z0-9]/g,'').slice(0,50)||'GoblinDings';const names=[[0,'Daddy Dingy personal dingbat font'],[1,family],[2,'Regular'],[3,family+'; Version 1.0'],[4,family+' Regular'],[5,'Version 1.0'],[6,ps+'-Regular']];const entries=[],strings=new Buf();for(const [id,s] of names){const bytes=[];for(const code of s){const p=code.codePointAt(0);if(p<65536){bytes.push(p>>8,p&255)}else{const v=p-65536,hi=0xd800+(v>>10),lo=0xdc00+(v&1023);bytes.push(hi>>8,hi&255,lo>>8,lo&255)}}entries.push({id,length:bytes.length,offset:strings.length});strings.bytes(bytes)}const w=new Buf();w.u16(0);w.u16(entries.length);w.u16(6+entries.length*12);for(const e of entries){w.u16(3);w.u16(1);w.u16(0x409);w.u16(e.id);w.u16(e.length);w.u16(e.offset)}w.bytes(strings.data());return w.data()}
+function ttfTableCmap(mapping){const codes=Object.keys(mapping).map(Number).sort((a,b)=>a-b),n=codes.length+1,segCountX2=n*2,search=Math.pow(2,Math.floor(Math.log2(n)))*2;const sub=new Buf();sub.u16(4);sub.u16(16+8*n);sub.u16(0);sub.u16(segCountX2);sub.u16(search);sub.u16(Math.log2(search/2));sub.u16(segCountX2-search);for(const c of codes)sub.u16(c);sub.u16(65535);sub.u16(0);for(const c of codes)sub.u16(c);sub.u16(65535);for(const c of codes)sub.u16((mapping[c]-c)&65535);sub.u16(1);for(let i=0;i<n;i++)sub.u16(0);const w=new Buf();w.u16(0);w.u16(2);w.u16(0);w.u16(3);w.u32(20);w.u16(3);w.u16(1);w.u32(20);w.bytes(sub.data());return w.data()}
+function makeGlyf(g){const w=new Buf(),contours=g.contours;w.i16(contours.length);for(const n of [g.xMin,g.yMin,g.xMax,g.yMax])w.i16(n);if(!contours.length)return w.data();let count=0,points=[];for(const contour of contours){points.push(...contour);count+=contour.length;w.u16(count-1)}w.u16(0); // instructionLength
+ for(const p of points)w.u8(0x01); // on-curve; uncompressed signed XY deltas
+ let last=0;for(const p of points){w.i16(p.x-last);last=p.x;}last=0;for(const p of points){w.i16(p.y-last);last=p.y;}return w.data();}
+function toTTF(){const entries=Object.entries(state.slots).filter(([k,v])=>k.length===1&&state.assets.some(a=>a.id===v.id)).sort((a,b)=>a[0].charCodeAt(0)-b[0].charCodeAt(0));if(!entries.length)throw Error('Assign at least one SVG to a key.');
+ const glyphs=[{contours:[],advance:1000,xMin:0,yMin:0,xMax:0,yMax:0,points:0},{contours:[],advance:1000,xMin:0,yMin:0,xMax:0,yMax:0,points:0}],mapping={32:1};
+ for(const [ch,s] of entries){const code=ch.charCodeAt(0);if(code<32||code>126)continue;const c=toGlyph(s);const pts=c.flat(),a={contours:c,advance:1000,points:pts.length};if(pts.length){a.xMin=Math.min(...pts.map(p=>p.x));a.xMax=Math.max(...pts.map(p=>p.x));a.yMin=Math.min(...pts.map(p=>p.y));a.yMax=Math.max(...pts.map(p=>p.y));}else{a.xMin=a.xMax=a.yMin=a.yMax=0;}if(pts.length>45000)throw Error(ch+' has too many vector points. Simplify it in Illustrator.');for(const contour of c){if(contour.length>15000)throw Error(ch+' has an oversized contour. Simplify it.');}if(code===32){glyphs[1]=a;continue;}glyphs.push(a);mapping[code]=glyphs.length-1;}
+ const stats={x0:Math.min(...glyphs.map(g=>g.xMin)),y0:Math.min(...glyphs.map(g=>g.yMin)),x1:Math.max(...glyphs.map(g=>g.xMax)),y1:Math.max(...glyphs.map(g=>g.yMax))};
+ const glyf=new Buf(),loca=new Buf();for(const g of glyphs){loca.u32(glyf.length);glyf.bytes(makeGlyf(g));glyf.pad4()}loca.u32(glyf.length);
+ const hmtx=new Buf();for(const g of glyphs){hmtx.u16(1000);hmtx.i16(g.xMin)}
+ const tables={'OS/2':ttfTableOS2(Object.keys(mapping).map(Number),stats),cmap:ttfTableCmap(mapping),glyf:glyf.data(),head:ttfTableHead(stats),hhea:ttfTableHhea(glyphs,stats),hmtx:hmtx.data(),loca:loca.data(),maxp:ttfTableMaxp(glyphs),name:ttfTableName(state.fontName),post:ttfTablePost()};
+ const keys=Object.keys(tables).sort(),n=keys.length,sz=Math.pow(2,Math.floor(Math.log2(n))),w=new Buf();w.u32(0x00010000);w.u16(n);w.u16(sz*16);w.u16(Math.log2(sz));w.u16(n*16-sz*16);
+ let offset=12+n*16,headOff=-1;const data=[];
+ function checksum(b){let val=0;for(let i=0;i<b.length;i+=4){const a=((b[i]||0)<<24)|((b[i+1]||0)<<16)|((b[i+2]||0)<<8)|(b[i+3]||0);val=(val+a)>>>0;}return val;}
+ for(const key of keys){const b=tables[key];w.tag(key);w.u32(checksum(b));w.u32(offset);w.u32(b.length);if(key==='head')headOff=offset;data.push(b);offset+=Math.ceil(b.length/4)*4;}
+ for(const b of data){w.bytes(b);w.pad4()}
+ const result=w.data(),dv=new DataView(result.buffer),adjust=(0xB1B0AFBA-checksum(result))>>>0;dv.setUint32(headOff+8,adjust,false);return result;
+}
+function exportTTF(){try{const buf=toTTF(),name=(state.fontName||'Daddy-Dingy-Dings').replace(/[^\w-]+/g,'-');download(buf,name+'.ttf','font/ttf');toast('Real .TTF exported! '+Object.keys(state.slots).length+' mappings, '+Math.round(buf.length/1024)+' KB.');}catch(e){console.error(e);toast('TTF export failed: '+e.message)}}
+function addDemo(){const examples=[['Spiky-Sparkle','<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path fill="black" d="M50 0L60 36 95 10 71 44 100 50 71 57 92 91 60 66 50 100 40 66 8 91 29 57 0 50 29 43 5 10 40 35Z"/></svg>'],['Blob-Star','<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path fill="black" d="M50 8C58 31 66 35 92 30C69 45 66 53 88 76C61 64 52 69 45 93C42 65 34 57 9 64C32 49 32 41 12 18C34 30 43 28 50 8Z"/></svg>'],['Alien-Eye','<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path fill="black" fill-rule="evenodd" d="M3 50Q50 -5 97 50Q50 106 3 50Z M50 29A21 21 0 1 0 50 71A21 21 0 1 0 50 29Z"/></svg>']];for(const [name,svg] of examples){const v=svgToContours(svg),id='g'+(++idCounter);state.assets.push({id,name,svg,contours:v.contours,box:bbox(v.contours),warnings:[]});if(name==='Spiky-Sparkle')state.slots['a']={id,x:0,y:0,scale:100,rotation:0};if(name==='Blob-Star')state.slots['s']={id,x:0,y:0,scale:100,rotation:0};if(name==='Alien-Eye')state.slots['d']={id,x:0,y:0,scale:100,rotation:0};}state.activeAsset=null;state.selectedKey='a';render();saveLocal();toast('Three demo dings on A, S and D. Try exporting!');}
+$('drop').onclick=()=>$('svgFiles').click();$('svgFiles').onchange=e=>{loadSVGFiles(e.target.files);e.target.value=''};
+for(const e of ['dragenter','dragover'])$('drop').addEventListener(e,event=>{event.preventDefault();$('drop').classList.add('drag')});
+for(const e of ['dragleave','drop'])$('drop').addEventListener(e,event=>{event.preventDefault();$('drop').classList.remove('drag')});
+$('drop').addEventListener('drop',e=>loadSVGFiles(e.dataTransfer.files));$('demo').onclick=addDemo;
+$('clearAll').onclick=()=>{if(state.assets.length&&!confirm('Clear every SVG and keyboard assignment? Save your project first if you need it.'))return;state.assets=[];state.slots={};state.activeAsset=null;render();saveLocal();toast('Everything cleared. Fresh chaos.');};
+$('normalMode').onclick=()=>{state.shift=false;renderKeyboard()};$('shiftMode').onclick=()=>{state.shift=true;renderKeyboard()};
+$('unassign').onclick=()=>{delete state.slots[state.selectedKey];render();saveLocal();toast('Cleared key '+keyLabel(state.selectedKey))};
+for(const name of ['size','x','y','rotation'])$(name).addEventListener('input',e=>{const prop=name==='size'?'scale':name;editSlot(prop,e.target.value)});
+$('resetGlyph').onclick=()=>{const s=state.slots[state.selectedKey];if(s){Object.assign(s,{x:0,y:0,scale:100,rotation:0});render();saveLocal();toast('Glyph reset.')}};
+$('testText').oninput=renderPreview;$('fontName').oninput=e=>{state.fontName=e.target.value.slice(0,40);saveLocal()};
+$('saveProject').onclick=saveProject;$('loadProject').onclick=()=>$('projectFile').click();$('projectFile').onchange=async e=>{const f=e.target.files?.[0];if(f)await openProject(f);e.target.value=''};$('exportFont').onclick=exportTTF;
+$('copyMapping').onclick=async()=>{const line=Object.keys(state.slots).sort().map(ch=>`${ch===' '?'SPACE':ch}: ${state.assets.find(a=>a.id===state.slots[ch].id)?.name||'?'}`).join('\n');try{await navigator.clipboard.writeText(line);toast('Keyboard map copied.')}catch(e){download(line,'keyboard-map.txt','text/plain');toast('Downloaded keyboard map text.')}};
+$('stage').addEventListener('pointerdown',e=>{const slot=state.slots[state.selectedKey];if(!slot)return;dragStart={startX:e.clientX,startY:e.clientY,x:slot.x,y:slot.y};$('stage').setPointerCapture(e.pointerId)});
+$('stage').addEventListener('pointermove',e=>{if(!dragStart)return;const slot=state.slots[state.selectedKey];if(!slot)return;const r=$('stage').getBoundingClientRect(),unit=1000/r.width;slot.x=clamp(Math.round(dragStart.x+(e.clientX-dragStart.startX)*unit),-350,350);slot.y=clamp(Math.round(dragStart.y-(e.clientY-dragStart.startY)*unit),-350,350);renderKeyboard();renderEditor();renderPreview();});
+$('stage').addEventListener('pointerup',()=>{if(dragStart){dragStart=null;saveLocal()}});$('stage').addEventListener('pointercancel',()=>dragStart=null);
+try{const stored=JSON.parse(localStorage.getItem('daddy-dingy-project-v1')||'null');if(stored?.version===1&&Array.isArray(stored.assets)){let count=0;for(const a of stored.assets){try{const v=svgToContours(a.svg);state.assets.push({id:a.id,name:a.name,svg:a.svg,contours:v.contours,box:bbox(v.contours),warnings:v.warnings});count++;idCounter=Math.max(idCounter,Number(String(a.id).slice(1))||0)}catch(e){}}state.slots=stored.slots||{};state.fontName=stored.fontName||state.fontName;if(count)toast('Autosaved project restored · '+count+' icons.');}}catch(e){console.warn('No autosave',e)}
+render();
+</script>
+</body>
 </html>
-
