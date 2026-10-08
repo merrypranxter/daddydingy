@@ -22,7 +22,7 @@ Single-design SVG imports still work as before; manual keyboard stamping remains
 ## Run
 
 - **Google AI Studio:** Import the repository from GitHub; Vite launches the browser-based app.
-- **Local browser:** Open `index.html` with `sheet-harvester.js` beside it (both files required for sheet detection).
+- **Local browser:** Open `index.html` by itself. The harvester is included in the same standalone file, with no separate JS dependency.
 - **Vite:** Run `npm install`, `npm run dev`, or `npm run build`.
 
 Everything runs in your browser. No AI API, backend, uploads to a server, or account required.
