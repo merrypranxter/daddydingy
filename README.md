@@ -5,6 +5,30 @@ Local-first SVG-to-TTF dingbat font maker for SparkleBae.
 Import Illustrator SVGs, assign ornaments to keyboard keys, tweak placement/size/rotation, preview live typing, save editable projects, and export a real TrueType font.
 
 
+## 🌈 COLOR VECTOR FOUNDRY — no Adobe Capture required
+
+**Drop the original AI-generated contact sheet directly into Daddy Dingy's THE PILE.** The app now accepts **PNG, JPG, WebP, and SVG**. All raster tracing runs inside the browser on your device — no external API key, no model calls, no subscription.
+
+### Fast path for your nine-design, three-to-five-color sheets
+
+1. Make the usual square **3×3 contact sheet**, with nine reasonably separated ornaments, in an image generator. Save as PNG (recommended), JPG, or WebP.
+2. In **THE PILE**, open **🌈 COLOR VECTOR FOUNDRY**; leave the defaults at **3×3** / **5 colors** / **Detailed** / **Normal white removal**.
+3. Drop your image. Daddy Dingy cuts it into **nine equal cells** and traces each one's visible pixels into **real SVG path elements** (not embedded bitmap images).
+4. The resulting nine full-color vector assets automatically appear in the pile. They are also assigned to available keyboard keys when their outlines meet the font converter's point limits. Font export remains monochrome.
+5. Click **↓ Download last traced SVGs · ZIP** for individually named, transparent SVGs. Or use **↓ Selected SVG** / **↓ All SVGs · ZIP** in the pile.
+
+### Controls and important differences
+
+- **White becomes transparent**, including white internal accents and cutouts, rather than turning into another paint color. Threshold is adjustable for off-white photo backgrounds.
+- **3, 4, 5, 6, or 8 colors**: automatically identify distinct dominant flat colors within each design; preserve the brighter input colors rather than muddying them with antialias fringe.
+- **Compact / Detailed / Maximum detail**: choose tracing resolution and path simplification; finer detail takes more memory and creates larger SVGs.
+- **Single design mode** for an image containing just one illustration instead of nine.
+- **Existing proper SVG files remain vector by default.** To replace over-complicated Adobe Capture vectors with new, flatter colored paths, deliberately turn on **Re-trace SVGs too**. This raster-samples the SVG and converts the samples back to new paths, so precision will be limited by selected resolution.
+- Existing optimization attempts to bring individual files below **2 MB** without deleting their paths. The target is **not a guarantee**, but DingWings can handle larger SVGs.
+- All operations happen locally, even on an iPhone; very large sheets, very intricate art, and high-detail settings may use significant memory and take longer.
+
+**Quality limitation:** Converting a raster image to SVG cannot perfectly reconstruct the unknown original mathematical Bézier curves. This local tracer follows color-region boundaries and simplifies them into vector polygons. It is intended for *flat-color decorative art*, not photos, gradients, tiny text, or complicated layered shadows. Inspect small linework, fine detached dots, and cell boundaries on your first real sheet. Keep the original AI image as your master.
+
 ## 🌈 Individual multicolor SVG export (new — review branch)
 
 The **Sheet Harvester** now supports flat-color SVG sheets (including 3×3 designs traced in Adobe Capture). **Fonts stay black-and-white** because TrueType outlines do not encode arbitrary SVG color layers; independent SVG exports preserve paint.
