@@ -5,6 +5,19 @@ Local-first SVG-to-TTF dingbat font maker for SparkleBae.
 Import Illustrator SVGs, assign ornaments to keyboard keys, tweak placement/size/rotation, preview live typing, save editable projects, and export a real TrueType font.
 
 
+## ⬜ Remove a white SVG background on iPhone
+
+A quick browser-only alternative to installing a vector editor: in **THE PILE**, select the colorful SVG, then tap **⬜ Remove white backing**. Daddy Dingy inspects the actual vector objects and exports a separate `-transparent.svg`. The existing source and font mapping stay unchanged.
+
+- Works when the apparent white background is a **white vector shape covering practically the entire SVG canvas**.
+- Does **not** erase white lines, holes, highlights, tiny dots, or internal white artwork just because those objects are white.
+- It deliberately refuses to delete ambiguous, multi-part white compound paths; removing them could damage internal white details.
+- If the preview is white but the SVG already has no background shape, nothing will be removed. Check it against a checkerboard.
+- A white bitmap embedded inside an SVG isn't a removable vector backdrop. Convert the source or inspect the actual file.
+- To manually select/delete an unusual white shape on iPhone, a true vector editor such as Amadine or Linearity Curve is useful.
+
+No rasterization, no paid APIs, and no destructive edits. This is in the same review PR as the multicolor SVG extraction.
+
 ## 🌈 Individual multicolor SVG export (new — review branch)
 
 The **Sheet Harvester** now supports flat-color SVG sheets (including 3×3 designs traced in Adobe Capture). **Fonts stay black-and-white** because TrueType outlines do not encode arbitrary SVG color layers; independent SVG exports preserve paint.
