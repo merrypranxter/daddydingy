@@ -38,8 +38,34 @@ try{
  assert.match(status,/9 separate SVGs|9.*ready/i);
  assert.equal(await page.locator("#vctDownload").isDisabled(),false);
  assert.equal(await page.locator("#vctPreviews img").count(),9);
- assert.equal(await page.locator("#assetList .svg-tile").count(),9,"nine individual color SVG assets in pile");
+
+ // ALL artwork inputs must accept a raster JPEG, not only the Foundry's input.
+ // Reuse the same JPEG but switch to single illustration to keep this fast.
+ await page.locator("#vctLayout").selectOption("single");
+ async function expectOneNewAsset(input,prior,label){
+   await input.setInputFiles([{name:"route-"+label+".jpeg",mimeType:"image/jpeg",buffer:image}]);
+   await page.waitForFunction(count=>document.querySelectorAll("#assetList .svg-tile").length===count
+       &&/COLOR SVGs ready/.test(document.querySelector("#vctStatus")?.textContent||""),
+       prior+1,{timeout:90000});
+   assert.equal(await page.locator("#assetList .svg-tile").count(),prior+1,label+" imported jpeg");
+ }
+ await expectOneNewAsset(page.locator("#svgFiles"),9,"main");
+ await expectOneNewAsset(page.locator("#captureFile"),10,"legacy-clean-capture");
+ await page.evaluate(async encoded=>{
+   const bytes=Uint8Array.from(atob(encoded),ch=>ch.charCodeAt(0));
+   const file=new File([bytes],"dragged-test.jpeg",{type:"image/jpeg"});
+   const transfer=new DataTransfer();transfer.items.add(file);
+   const event=new DragEvent("drop",{bubbles:true,cancelable:true,dataTransfer:transfer});
+   document.querySelector("#drop").dispatchEvent(event);
+ },image.toString("base64"));
+ await page.waitForFunction(()=>document.querySelectorAll("#assetList .svg-tile").length===12
+    &&/COLOR SVGs ready/.test(document.querySelector("#vctStatus")?.textContent||""),null,{timeout:90000});
+ assert.ok(!(await page.locator("#vctStatus").innerText()).includes("Not a valid SVG"));
+ assert.equal(await page.locator("#assetList .svg-tile").count(),12,"dragged JPEG routed once");
+
+ assert.equal(await page.locator("#assetList .svg-tile").count(),12,"9 contact sheet designs and three additional JPEG imports");
  assert.equal(await page.locator("#assetList .svg-tile").first().innerText().then(s=>s.includes("COLOR SVG")),true,"color SVG assets are labeled, not converted into monochrome fonts");
+
  await page.locator("#vctLayout").selectOption("four");
  assert.equal(await page.locator("#vctLayout").inputValue(),"four","2x2 sheets supported");
  assert.equal(errors.length,0,errors.join("\n"));

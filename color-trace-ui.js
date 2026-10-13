@@ -40,10 +40,12 @@ function initColorFoundry(){
  pile.after(panel);
  const picker=$id("svgFiles");
  picker.accept=".svg,image/svg+xml,.png,.jpg,.jpeg,.webp,image/png,image/jpeg,image/webp";
- pile.querySelector("b").textContent="⊕ DROP COLOR IMAGES OR SVGs";
- pile.querySelector("small").textContent="Photos, PNG, JPG, WebP and SVG · automatic vector tracing";
+ pile.querySelector("b").textContent="⊕ UPLOAD PHOTO OR SVG";
+ pile.querySelector("small").textContent="Photos → traced color SVGs · vector SVGs → sheet harvester";
  const notify=message=>{$id("vctStatus").textContent=message;};
  const imageRe=/\.(png|jpe?g|webp|heic|heif|avif)$/i;
+ // Health check visible if source code or browser cannot initialize the tracer.
+ window.dingyFoundryReady=true;
  let lastBatch=[];
  async function readImage(file){
   const url=URL.createObjectURL(file),img=new Image();
@@ -149,6 +151,18 @@ function initColorFoundry(){
   notify("Photo dropped: "+files.length+" file(s). Starting color tracing…");
   loadSVGFiles(files).catch(err=>{notify("Photo import error: "+err.message);toast(err.message);});
  },true);
+ // Stable import hook used by every legacy artwork picker and the SVG harvester.
+ // This removes the old SVG-only split brain: photos ALWAYS reach vectorization.
+ window.dingyImportRasterArtwork=async file=>{
+  notify("Received "+file.name+" · "+Math.round(file.size/1024)+" KB. Starting raster tracing…");
+  try{await vectorizeFile(file);}
+  catch(err){
+   notify("Could not trace "+file.name+": "+err.message);
+   console.error("Daddy Dingy raster import:",err);
+   toast("Photo tracing error: "+err.message);
+   throw err;
+  }
+ };
  const earlier=loadSVGFiles;
  loadSVGFiles=async function(input){
   const uploads=Array.from(input||[]);
@@ -157,8 +171,13 @@ function initColorFoundry(){
    const isSvg=/\.svg$/i.test(file.name)||file.type==="image/svg+xml";
    if(isRaster||(isSvg&&$id("vctRetraceSVG").checked)){
     notify("Importing "+file.name+" as "+(isSvg?"re-traced SVG":"photo")+"…");
-    try{await vectorizeFile(file);}catch(err){notify("⚠ "+file.name+": "+err.message);toast(err.message);}
-   }else if(isSvg){await earlier([file]);}
+    try{await window.dingyImportRasterArtwork(file);}catch(err){/* visible above */}
+   }else if(isSvg){
+    notify("Opening vector "+file.name+" with SVG Sheet Harvester…");
+    await earlier([file]);
+   }else{
+    notify("Unsupported file: "+file.name+". Please use JPEG, PNG, WebP, HEIC, or SVG.");
+   }
   }
  };
  $id("vctPhotoButton").onclick=()=>{
