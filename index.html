@@ -12,11 +12,11 @@
 <header class="header"><div><div class="eyebrow">ASTRAL TRASH TOOLS / personal font laboratory</div><h1>DADDY <span>DINGY</span> ✳</h1><p class="tagline">Your SVGs. Your keyboard. Your beautiful little mutant font.</p></div><div class="actions"><button id="saveProject">↡ Save project</button><button id="loadProject">↟ Open project</button><button class="primary" id="exportFont">✦ EXPORT .TTF</button></div></header>
 <div class="info-banner"><span class="dot"></span>Everything runs <b>inside your browser</b>. Your files aren't uploaded anywhere. SVG fills become solid font shapes; stroke-only lines and clipping masks should be expanded in Illustrator first.</div>
 <div class="pagegrid">
-<section class="panel"><div class="panel-head"><h2>01 / THE PILE</h2><span class="count" id="assetCount">0 SVGs</span></div><div class="panel-content"><div class="drop" id="drop"><b>⊕ DROP SVGs HERE</b><small>or tap to select a whole batch</small></div><div class="stack" style="margin-bottom:12px"><button id="demo" class="tiny">✳ Load demo dings</button><button id="exportSelectedSVG" class="tiny mint" title="Export selected ornament as a vector SVG">↓ Selected SVG</button><button id="exportAllSVG" class="tiny lime" title="Download one SVG per ornament as a ZIP">↓ All SVGs · ZIP</button><button id="clearAll" class="tiny">Clear all</button></div><div id="assetList" class="svg-list"></div><p class="hint">Select an icon to export its own SVG, or download the entire pile in a ZIP. Imported colorful SVGs keep their original fills on SVG export; font outlines stay monochrome.</p></div></section>
+<section class="panel"><div class="panel-head"><h2>01 / THE PILE</h2><span class="count" id="assetCount">0 SVGs</span></div><div class="panel-content"><div class="drop" id="drop"><b>⊕ DROP SVGs HERE</b><small>or tap to select a whole batch</small></div><div class="stack" style="margin-bottom:12px"><button id="demo" class="tiny">✳ Load demo dings</button><button id="captureClean" class="tiny" title="Clean extra Adobe metadata without changing traced geometry">🪚 Clean Capture SVG</button><button id="exportSelectedSVG" class="tiny mint" title="Export selected ornament as a vector SVG">↓ Selected SVG</button><button id="exportAllSVG" class="tiny lime" title="Download one SVG per ornament as a ZIP">↓ All SVGs · ZIP</button><button id="clearAll" class="tiny">Clear all</button></div><div id="assetList" class="svg-list"></div><p class="hint">Select an icon to export its own SVG, or download the entire pile in a ZIP. Imported colorful SVGs keep their original fills on SVG export; font outlines stay monochrome.</p></div></section>
 <section class="panel"><div class="panel-head"><h2>02 / KEYBOARD CHAOS</h2><div class="mode" role="group" aria-label="Keyboard layer"><button id="normalMode" class="active">normal</button><button id="shiftMode">SHIFT</button></div></div><div class="panel-content"><p class="hint" id="keyHint">Click a key to edit it. Pick an icon from the left first to stamp it onto a key.</p><div id="keyboard" class="keyboard"></div><div class="stack" style="justify-content:space-between;align-items:center;margin-top:6px"><span class="count" id="slotCount">0 keys assigned</span><button class="tiny" id="unassign">✕ Empty selected key</button></div><div class="type-test"><label class="slider-label" for="testText"><span>03 / TEST YOUR NONSENSE</span><span class="help">live glyph preview</span></label><input id="testText" type="text" value="Sparkle Bae 123!" maxlength="48" placeholder="Type random shit here"><div class="test-strip" id="testStrip"></div></div><div class="footer">Want A and a to be different shapes? Use the SHIFT layer. A shifted key is a separate glyph, not an automatic copy.</div></div></section>
 <section class="panel editor"><div class="panel-head"><h2>04 / GLYPH SURGERY</h2><span class="count" id="selectedName">Choose a key</span></div><div class="panel-content editgrid"><div class="workbench"><svg class="stage-svg" id="stage" viewBox="0 0 1000 1000" xmlns="http://www.w3.org/2000/svg" aria-label="Drag glyph to reposition"><rect x="0" y="0" width="1000" height="1000" fill="#f7f5ed"/><rect x="65" y="55" width="870" height="870" fill="none" stroke="#c8c0d1" stroke-width="2" stroke-dasharray="8 9"/><path d="M0 800H1000" stroke="#e562a0" stroke-width="3" stroke-dasharray="14 9"/><path d="M500 0V1000" stroke="#d5cddc" stroke-width="2" stroke-dasharray="7 15"/><path id="stageGlyph" d="" fill="#160d22" fill-rule="nonzero"/></svg><div class="canvas-info"><span>↔ drag to position</span><span>pink = baseline</span></div></div><div><div class="sliders"><label><div class="slider-label"><span>Size</span><output id="sizeOut">100%</output></div><input type="range" id="size" min="20" max="230" value="100" step="1"></label><label><div class="slider-label"><span>Horizontal</span><output id="xOut">0</output></div><input type="range" id="x" min="-350" max="350" value="0" step="1"></label><label><div class="slider-label"><span>Vertical</span><output id="yOut">0</output></div><input type="range" id="y" min="-350" max="350" value="0" step="1"></label><label><div class="slider-label"><span>Rotate</span><output id="rotationOut">0°</output></div><input type="range" id="rotation" min="-180" max="180" value="0" step="1"></label></div><div class="stack" style="margin-top:13px"><button id="resetGlyph" class="tiny">↺ Reset position</button><button id="copyMapping" class="tiny">Copy key map</button></div><p class="hint" id="editorInfo" style="margin-top:12px">Adjust each key independently, or drag directly on the canvas.</p><label for="fontName" class="slider-label" style="margin-top:14px">FONT NAME</label><input id="fontName" type="text" value="Astral Trash Dings" maxlength="40" style="width:100%;margin-top:6px" autocomplete="off"></div></div></section>
 </div><footer class="footer">DADDY DINGY v1.3 · Individual SVG and ZIP exports · multicolor SVG originals preserved · TTF monochrome · 0 API cost.</footer>
-<input id="svgFiles" type="file" multiple accept=".svg,image/svg+xml"><input id="projectFile" type="file" accept=".json,application/json"><div class="status" id="status" role="status" aria-live="polite"></div>
+<input id="svgFiles" type="file" multiple accept=".svg,image/svg+xml"><input id="captureFile" type="file" accept=".svg,image/svg+xml"><input id="projectFile" type="file" accept=".json,application/json"><div class="status" id="status" role="status" aria-live="polite"></div>
 </main>
 <script>
 'use strict';
@@ -268,6 +268,29 @@ function exportAllDings(){
 $('exportSelectedSVG').onclick=exportSelectedDing;
 $('exportAllSVG').onclick=exportAllDings;
 
+
+// SVG cleanup for Adobe Capture: no point deletion or geometry changes.
+$('captureClean').onclick=()=>$('captureFile').click();
+$('captureFile').onchange=async e=>{
+ const file=e.target.files[0];e.target.value='';if(!file)return;
+ if(file.size>75_000_000){toast('This SVG is over 75 MB; use Capture Smooth or a desktop optimizer first.');return;}
+ try{
+   const raw=await file.text();
+   const doc=new DOMParser().parseFromString(raw,'image/svg+xml');
+   if(doc.querySelector('parsererror')||doc.documentElement.localName!=='svg')throw Error('Not a valid SVG.');
+   doc.querySelectorAll('metadata,script,foreignObject').forEach(n=>n.remove());
+   const walker=doc.createTreeWalker(doc,NodeFilter.SHOW_COMMENT);
+   const comments=[];while(walker.nextNode())comments.push(walker.currentNode);
+   comments.forEach(n=>n.remove());
+   const svg=new XMLSerializer().serializeToString(doc.documentElement)
+     .replace(/>\s+</g,'><').replace(/\s+\/>/g,'/>');
+   const after=new TextEncoder().encode(svg).length;
+   const saved=(100*(1-after/file.size)).toFixed(1);
+   download(svg,safeDingFileName(file.name.replace(/\.svg$/i,''))+'-clean.svg','image/svg+xml');
+   toast('SVG clean: '+(file.size/1e6).toFixed(1)+' MB → '+(after/1e6).toFixed(1)+' MB ('+saved+'%). Path points preserved. If still too big, smooth in Capture.');
+ }catch(err){toast('Could not clean SVG: '+err.message);}
+};
+
 function saveProject(){const data=JSON.stringify({version:1,assets:state.assets.map(a=>({id:a.id,name:a.name,svg:a.svg})),slots:state.slots,fontName:state.fontName},null,2);download(data,(state.fontName||'dingbats').replace(/[^\w-]+/g,'-')+'.glyphgoblin.json','application/json');toast('Editable project saved. Your keys and SVGs are inside.');}
 async function openProject(file){try{const d=JSON.parse(await file.text());if(d.version!==1||!Array.isArray(d.assets)||typeof d.slots!=='object')throw Error('Not a Daddy Dingy project.');const assets=[];for(const a of d.assets){const converted=svgToContours(a.svg);assets.push({id:String(a.id),name:String(a.name),svg:a.svg,contours:converted.contours,box:bbox(converted.contours),warnings:converted.warnings});}
  state.assets=assets;const ids=new Set(assets.map(a=>a.id));state.slots={};for(const [k,s] of Object.entries(d.slots))if(k.length===1&&ids.has(s.id)){state.slots[k]={id:s.id,x:clamp(Number(s.x)||0,-350,350),y:clamp(Number(s.y)||0,-350,350),scale:clamp(Number(s.scale)||100,20,230),rotation:clamp(Number(s.rotation)||0,-180,180)};}
@@ -359,6 +382,7 @@ render();
     '<div class="harvest-work"><div class="harvest-picture" id="shPicture"><img id="shImage" alt="Full vector sheet"><div id="shRegions"></div><div class="harvest-manual" id="shManual" hidden></div><div class="harvest-drawn" id="shDrawn" hidden></div></div>' +
     '<div class="harvest-tools"><div class="harvest-choice" id="shCount">0 selected</div>' +
     '<label><input id="shFill" type="checkbox" checked> Auto-fill next EMPTY keyboard keys (lowercase first, then SHIFT). Never replace assigned keys.</label>' +
+    '<label><input id="shColor" type="checkbox" checked> Preserve original colors for separated SVGs (fonts remain black-and-white).</label>' +
     '<button class="primary" id="shHarvest">✳ HARVEST SELECTED</button><button class="mint" id="shAll">⚡ HARVEST ALL + FILL KEYS</button>' +
     '<button id="shToggle">✎ Draw a custom box</button><button id="shAddBox" disabled>＋ Add drawn design</button>' +
     '<button id="shAsOne">Import whole SVG as ONE icon</button><button id="shCancel">✓ Done with sheet</button>' +
@@ -366,7 +390,55 @@ render();
   document.body.append(shell);
   const q = id => shell.querySelector('#' + id);
   let current = null, drawStart = null;
+  
   const number = n => Math.round(n * 100) / 100;
+  // Keep five-color SVG shapes intact. The TTF pipeline still uses flattened
+  // monochrome contours, but extracted standalone SVGs can preserve source paints.
+  function preserveSheetColor(svgText,cell,fullView){
+    const doc=new DOMParser().parseFromString(svgText,'image/svg+xml');
+    const root=doc.documentElement;
+    if(root.localName!=='svg' || doc.querySelector('parsererror'))throw Error('Invalid color SVG');
+    doc.querySelectorAll('script,foreignObject,iframe,object,embed,image').forEach(n=>n.remove());
+    doc.querySelectorAll('*').forEach(el=>{
+      for(const a of [...el.attributes]){
+        if(/^on/i.test(a.name)||/^(href|xlink:href)$/i.test(a.name)&&!a.value.startsWith('#'))el.removeAttribute(a.name);
+      }
+    });
+    const shapeTags='path,rect,circle,ellipse,polygon,polyline,line,use,text';
+    const graphics=[...root.querySelectorAll(shapeTags)].filter(n=>!n.closest('defs,clipPath,mask,pattern,filter,symbol'));
+    if(!graphics.length)throw Error('No independent SVG shapes');
+    const mount=document.createElement('div');
+    mount.style.cssText='position:fixed;left:-4000px;top:0;width:1000px;height:1000px;visibility:hidden;pointer-events:none;';
+    root.setAttribute('width','1000');root.setAttribute('height','1000');
+    mount.append(root);document.body.append(mount);
+    let selected=0;
+    try{
+      const rootMatrix=root.getCTM();
+      if(!rootMatrix)throw Error('SVG geometry not measurable');
+      const inv=rootMatrix.inverse();
+      for(const el of graphics){
+        let keep=false;
+        try{
+          const b=el.getBBox(),matrix=inv.multiply(el.getCTM());
+          const corners=[[b.x,b.y],[b.x+b.width,b.y],[b.x,b.y+b.height],[b.x+b.width,b.y+b.height]]
+            .map(([x,y])=>new DOMPoint(x,y).matrixTransform(matrix));
+          const xs=corners.map(p=>p.x),ys=corners.map(p=>p.y);
+          const x0=Math.min(...xs),x1=Math.max(...xs),y0=Math.min(...ys),y1=Math.max(...ys);
+          const coversSheet=(x1-x0)>fullView.w*.92&&(y1-y0)>fullView.h*.92;
+          const midx=(x0+x1)/2,midy=(y0+y1)/2;
+          keep=!coversSheet&&midx>=cell.x&&midx<=cell.x+cell.w&&midy>=cell.y&&midy<=cell.y+cell.h;
+        }catch(e){keep=false;}
+        if(!keep)el.remove();else selected++;
+      }
+    }finally{mount.remove();}
+    if(!selected)throw Error('No shapes inside selected cell');
+    const pad=Math.min(cell.w,cell.h)*.025;
+    root.setAttribute('viewBox',[cell.x-pad,cell.y-pad,cell.w+2*pad,cell.h+2*pad].join(' '));
+    root.removeAttribute('width');root.removeAttribute('height');
+    root.setAttribute('xmlns',NS);
+    return new XMLSerializer().serializeToString(root);
+  }
+
   function done() {
     const job = current;
     current = null; drawStart = null; shell.hidden = true;
@@ -534,6 +606,7 @@ render();
       q('shPicture').style.aspectRatio=detected.view.w+' / '+detected.view.h;
       q('shPicture').style.setProperty('--sheet-ratio',String(detected.view.w/detected.view.h));
       q('shFill').checked = true;
+      q('shColor').checked = true;
       q('shToggle').textContent='✎ Draw a custom box';
       q('shManual').hidden=true;
       q('shDrawn').hidden=true;
@@ -577,10 +650,11 @@ render();
       const points=selected.reduce((n,c)=>n+c.points.length,0);
       if(!points || points>120000){skipped++;continue;}
       try{
-        const svg=makeSVG(selected);
+        let svg=makeSVG(selected),colorWarning='';
+        if(q('shColor').checked){try{svg=preserveSheetColor(current.text,region,sourceBox);}catch(e){colorWarning='Color preservation unavailable: '+e.message;}}
         const name=current.file.name.replace(/\.svg$/i,'')+' · '+String(imported+1).padStart(2,'0');
         const id='g'+(++idCounter);
-        state.assets.push({id,name,svg,contours:selected,box:bbox(selected),warnings:[]});
+        state.assets.push({id,name,svg,contours:selected,box:bbox(selected),warnings:colorWarning?[colorWarning]:[]});
         imported++;
         if(fill){
           while(next<keySequence.length && state.slots[keySequence[next]])next++;
