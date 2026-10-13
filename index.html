@@ -10,12 +10,12 @@
 <body>
 <main class="app">
 <header class="header"><div><div class="eyebrow">ASTRAL TRASH TOOLS / personal font laboratory</div><h1>DADDY <span>DINGY</span> ✳</h1><p class="tagline">Your SVGs. Your keyboard. Your beautiful little mutant font.</p></div><div class="actions"><button id="saveProject">↡ Save project</button><button id="loadProject">↟ Open project</button><button class="primary" id="exportFont">✦ EXPORT .TTF</button></div></header>
-<div class="info-banner"><span class="dot"></span>Everything runs <b>inside your browser</b>. Your files aren't uploaded anywhere. SVG fills become solid font shapes; stroke-only lines and clipping masks should be expanded in Illustrator first.</div>
+<div class="info-banner"><span class="dot"></span>Everything runs <b>inside your browser</b>. Your files aren't uploaded anywhere. <b>WHITE → TRANSPARENT</b> automatically on color SVG exports (including tiny white details). TTF output remains monochrome.</div>
 <div class="pagegrid">
-<section class="panel"><div class="panel-head"><h2>01 / THE PILE</h2><span class="count" id="assetCount">0 SVGs</span></div><div class="panel-content"><div class="drop" id="drop"><b>⊕ DROP SVGs HERE</b><small>or tap to select a whole batch</small></div><div class="stack" style="margin-bottom:12px"><button id="demo" class="tiny">✳ Load demo dings</button><button id="captureClean" class="tiny" title="Clean extra Adobe metadata without changing traced geometry">🪚 Clean Capture SVG</button><button id="exportSelectedSVG" class="tiny mint" title="Export selected ornament as a vector SVG">↓ Selected SVG</button><button id="exportAllSVG" class="tiny lime" title="Download one optimized SVG per ornament as a ZIP">↓ All SVGs · ZIP</button><button id="clearAll" class="tiny">Clear all</button></div><div id="assetList" class="svg-list"></div><p class="hint">Full-color SVG export keeps paint and details. Daddy Dingy optimizes each file toward 2 MB; anything larger is flagged, not destroyed.</p><label class="slider-label" for="svgQuality">SVG size strategy</label><select id="svgQuality" style="width:100%;margin-bottom:7px;background:#170d2a;color:#fef6ff;padding:8px;border:1px solid #51416f;border-radius:9px"><option value="auto">Auto · target 2 MB, protect detail</option><option value="max">Maximum fidelity · no rounding</option><option value="compact">Compact · 3-decimal paths</option></select><div id="exportReport" class="hint" aria-live="polite">Nine designs in → nine individual SVGs out. All processing stays on-device.</div></div></section>
+<section class="panel"><div class="panel-head"><h2>01 / THE PILE</h2><span class="count" id="assetCount">0 SVGs</span></div><div class="panel-content"><div class="drop" id="drop"><b>⊕ DROP SVGs HERE</b><small>or tap to select a whole batch</small></div><div class="stack" style="margin-bottom:12px"><button id="demo" class="tiny">✳ Load demo dings</button><button id="captureClean" class="tiny" title="Clean extra Adobe metadata without changing traced geometry">🪚 Clean Capture SVG</button><button id="exportSelectedSVG" class="tiny mint" title="Export selected ornament as a vector SVG">↓ Selected SVG</button><button id="exportAllSVG" class="tiny lime" title="Download one optimized SVG per ornament as a ZIP">↓ All SVGs · ZIP</button><button id="clearAll" class="tiny">Clear all</button></div><div id="assetList" class="svg-list"></div><p class="hint"><b>⬜ WHITE IS CLEAR by default.</b> Full-color SVG export knocks out white pixels, even over colored shapes. Daddy Dingy aims for 2 MB per SVG without deleting vector points.</p><label class="slider-label" for="svgQuality">SVG size strategy</label><select id="svgQuality" style="width:100%;margin-bottom:7px;background:#170d2a;color:#fef6ff;padding:8px;border:1px solid #51416f;border-radius:9px"><option value="auto">Auto · target 2 MB, protect detail</option><option value="max">Maximum fidelity · no rounding</option><option value="compact">Compact · 3-decimal paths</option></select><div id="exportReport" class="hint" aria-live="polite">Nine designs in → nine individual SVGs out. All processing stays on-device.</div></div></section>
 <section class="panel"><div class="panel-head"><h2>02 / KEYBOARD CHAOS</h2><div class="mode" role="group" aria-label="Keyboard layer"><button id="normalMode" class="active">normal</button><button id="shiftMode">SHIFT</button></div></div><div class="panel-content"><p class="hint" id="keyHint">Click a key to edit it. Pick an icon from the left first to stamp it onto a key.</p><div id="keyboard" class="keyboard"></div><div class="stack" style="justify-content:space-between;align-items:center;margin-top:6px"><span class="count" id="slotCount">0 keys assigned</span><button class="tiny" id="unassign">✕ Empty selected key</button></div><div class="type-test"><label class="slider-label" for="testText"><span>03 / TEST YOUR NONSENSE</span><span class="help">live glyph preview</span></label><input id="testText" type="text" value="Sparkle Bae 123!" maxlength="48" placeholder="Type random shit here"><div class="test-strip" id="testStrip"></div></div><div class="footer">Want A and a to be different shapes? Use the SHIFT layer. A shifted key is a separate glyph, not an automatic copy.</div></div></section>
 <section class="panel editor"><div class="panel-head"><h2>04 / GLYPH SURGERY</h2><span class="count" id="selectedName">Choose a key</span></div><div class="panel-content editgrid"><div class="workbench"><svg class="stage-svg" id="stage" viewBox="0 0 1000 1000" xmlns="http://www.w3.org/2000/svg" aria-label="Drag glyph to reposition"><rect x="0" y="0" width="1000" height="1000" fill="#f7f5ed"/><rect x="65" y="55" width="870" height="870" fill="none" stroke="#c8c0d1" stroke-width="2" stroke-dasharray="8 9"/><path d="M0 800H1000" stroke="#e562a0" stroke-width="3" stroke-dasharray="14 9"/><path d="M500 0V1000" stroke="#d5cddc" stroke-width="2" stroke-dasharray="7 15"/><path id="stageGlyph" d="" fill="#160d22" fill-rule="nonzero"/></svg><div class="canvas-info"><span>↔ drag to position</span><span>pink = baseline</span></div></div><div><div class="sliders"><label><div class="slider-label"><span>Size</span><output id="sizeOut">100%</output></div><input type="range" id="size" min="20" max="230" value="100" step="1"></label><label><div class="slider-label"><span>Horizontal</span><output id="xOut">0</output></div><input type="range" id="x" min="-350" max="350" value="0" step="1"></label><label><div class="slider-label"><span>Vertical</span><output id="yOut">0</output></div><input type="range" id="y" min="-350" max="350" value="0" step="1"></label><label><div class="slider-label"><span>Rotate</span><output id="rotationOut">0°</output></div><input type="range" id="rotation" min="-180" max="180" value="0" step="1"></label></div><div class="stack" style="margin-top:13px"><button id="resetGlyph" class="tiny">↺ Reset position</button><button id="copyMapping" class="tiny">Copy key map</button></div><p class="hint" id="editorInfo" style="margin-top:12px">Adjust each key independently, or drag directly on the canvas.</p><label for="fontName" class="slider-label" style="margin-top:14px">FONT NAME</label><input id="fontName" type="text" value="Astral Trash Dings" maxlength="40" style="width:100%;margin-top:6px" autocomplete="off"></div></div></section>
-</div><footer class="footer">DADDY DINGY v1.3 · Color-preserving SVG + ZIP · 2 MB target, no point deletion · save a project JSON for giant sheets · 0 API cost.</footer>
+</div><footer class="footer">DADDY DINGY v1.4 · White is transparent by default · color SVG + ZIP · 2 MB target · 0 API cost.</footer>
 <input id="svgFiles" type="file" multiple accept=".svg,image/svg+xml"><input id="captureFile" type="file" accept=".svg,image/svg+xml"><input id="projectFile" type="file" accept=".json,application/json"><div class="status" id="status" role="status" aria-live="polite"></div>
 </main>
 <script>
@@ -102,6 +102,51 @@ function parsePath(d,tol){
 function polygon(points){return points.trim().split(/[\s,]+/).map(Number).reduce((a,n,i,ar)=>{if(i%2===0&&Number.isFinite(n)&&Number.isFinite(ar[i+1]))a.push({x:n,y:ar[i+1]});return a},[])}
 function ellipse(cx,cy,rx,ry,tol){if(rx<=0||ry<=0)return [];let n=clamp(Math.ceil(2*Math.PI*Math.sqrt((rx*rx+ry*ry)/2)/Math.sqrt(8*Math.max(tol,.001))),24,1000);return Array.from({length:n},(_,i)=>{const a=2*Math.PI*i/n;return {x:cx+Math.cos(a)*rx,y:cy+Math.sin(a)*ry}})}
 function numberAttr(el,n,def=0){const v=parseFloat(el.getAttribute(n));return Number.isFinite(v)?v:def;}
+
+// WHITE = ALPHA ZERO. Applied to the composited SVG (not individual shapes),
+// so white highlights and white-on-color knockouts become real transparent
+// openings instead of revealing the colored shape underneath.
+// Original path coordinates, five-color fills, and editability stay intact.
+function whiteIsTransparentSVG(svgText){
+ const doc=new DOMParser().parseFromString(svgText,'image/svg+xml'),root=doc.documentElement;
+ if(root.localName!=='svg'||doc.querySelector('parsererror'))throw Error('Not a valid SVG.');
+ if(root.getAttribute('data-ding-white-alpha')==='1')return svgText;
+ const create=tag=>doc.createElementNS(NS,tag);
+ const id='ding-white-alpha-'+Math.random().toString(36).slice(2,11);
+ const defs=create('defs'),filter=create('filter');
+ filter.id=id;
+ filter.setAttribute('x','-20%');filter.setAttribute('y','-20%');
+ filter.setAttribute('width','140%');filter.setAttribute('height','140%');
+ filter.setAttribute('color-interpolation-filters','sRGB');
+ const matrix=create('feColorMatrix');
+ matrix.setAttribute('in','SourceGraphic');matrix.setAttribute('type','matrix');
+ // alpha = clamp(192 - 64*(R+G+B)); pure white gives exactly zero.
+ matrix.setAttribute('values','1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  -64 -64 -64 0 192');
+ matrix.setAttribute('result','withoutWhite');
+ const preserve=create('feComposite');
+ preserve.setAttribute('in','withoutWhite');
+ preserve.setAttribute('in2','SourceAlpha');
+ preserve.setAttribute('operator','in');
+ filter.append(matrix,preserve);defs.append(filter);
+ const scene=create('g');
+ scene.setAttribute('data-ding-white-scene','1');
+ scene.setAttribute('filter','url(#'+id+')');
+ for(const node of [...root.childNodes]){
+   if(node.nodeType===1&&['defs','style','title','desc','metadata'].includes(node.localName.toLowerCase()))continue;
+   scene.appendChild(node);
+ }
+ root.insertBefore(defs,root.firstChild);
+ root.appendChild(scene);
+ root.setAttribute('data-ding-white-alpha','1');
+ return new XMLSerializer().serializeToString(root);
+}
+function isWhitePaint(value){
+ const s=String(value||'').toLowerCase().replace(/\s+/g,'');
+ if(['white','#fff','#ffffff','#ffffffff','rgb(255,255,255)','rgba(255,255,255,1)'].includes(s))return true;
+ const rgb=s.match(/^rgb\((100%)[,](100%)[,](100%)\)$/);
+ return !!rgb;
+}
+
 function cleanSVG(text){if(text.length>45_000_000)throw Error('SVG is over 45 MB; try the Clean Capture SVG tool or use smaller source sheets.');const doc=new DOMParser().parseFromString(text,'image/svg+xml');if(doc.querySelector('parsererror')||doc.documentElement.tagName.toLowerCase()!=='svg')throw Error('Not a valid SVG file.');return doc;}
 function svgToContours(svg,maxPoints=120000,detail=1){
  const doc=cleanSVG(svg),root=doc.documentElement,view=(root.getAttribute('viewBox')||'').split(/[\s,]+/).map(Number);
@@ -129,7 +174,7 @@ function svgToContours(svg,maxPoints=120000,detail=1){
  else if(tag==='ellipse'){const e=ellipse(numberAttr(el,'cx'),numberAttr(el,'cy'),numberAttr(el,'rx'),numberAttr(el,'ry'),tol);if(e.length)paths=[e];}
  else if(tag==='polygon'||tag==='polyline'){const e=polygon(el.getAttribute('points')||'');if(e.length>=3)paths=[e];}
  else if(tag==='text'||tag==='image'||tag==='foreignobject'){unsupported++;}
- if(paths.length){if(String(sty.fill).trim().toLowerCase()==='none'){if(sty.stroke&&sty.stroke!=='none')skippedStrokes++;}else for(const contour of paths){const pts=contour.map(p=>ptMat(p,m)).filter(p=>Number.isFinite(p.x)&&Number.isFinite(p.y));if(pts.length>=3)list.push({points:pts,evenOdd:sty.rule==='evenodd'});}}
+ if(paths.length){if(String(sty.fill).trim().toLowerCase()==='none'||isWhitePaint(sty.fill)){if(sty.stroke&&sty.stroke!=='none'&&!isWhitePaint(sty.stroke))skippedStrokes++;}else for(const contour of paths){const pts=contour.map(p=>ptMat(p,m)).filter(p=>Number.isFinite(p.x)&&Number.isFinite(p.y));if(pts.length>=3)list.push({points:pts,evenOdd:sty.rule==='evenodd'});}}
  // A <defs> reached through <use> is allowed; regular <defs> is not.
  for(const child of el.children||[])visit(child,m,sty,seen,inUse);
  }
@@ -191,7 +236,7 @@ function editSlot(prop,value){const slot=state.slots[state.selectedKey];if(!slot
 // Load oversized SVGs as color-only assets if the font-outline converter refuses.
 // This allows SVG exports and editable projects without pretending TTF can handle them.
 function restoreSvgAsset(a){
-  const base={id:String(a.id),name:String(a.name),svg:a.svg,contours:[],warnings:[]};
+  const base={id:String(a.id),name:String(a.name),svg:whiteIsTransparentSVG(a.svg),contours:[],warnings:[]};
   try{
     const converted=svgToContours(a.svg);
     base.contours=converted.contours;
@@ -282,8 +327,8 @@ function exportedDingSvg(asset) {
   // Imported standalone SVGs retain their full-color paint. Sheet-harvested
   // assets are already separate monochrome vector SVGs generated by the harvester.
   const original=(asset.svg||'').trim();
-  if(!/^<svg[\s>]/i.test(original))return monochromeGlyphSvg(asset);
-  return original;
+  if(!/^<svg[\s>]/i.test(original))return whiteIsTransparentSVG(monochromeGlyphSvg(asset));
+  return whiteIsTransparentSVG(original);
 }
 // Dependency-free ZIP32 STORE writer. No CDN, server, or third-party API.
 function packDingSvgZip(items){
