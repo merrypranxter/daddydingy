@@ -19,6 +19,8 @@ function initColorFoundry(){
  panel.id="colorFoundry";panel.open=true;
  panel.innerHTML=[
  '<summary>🌈 COLOR VECTOR FOUNDRY · NO CAPTURE NEEDED</summary>',
+ '<button id="vctPhotoButton" type="button" class="mint" style="width:100%;margin-top:12px;padding:11px">📸 Choose Photo / 3×3 Contact Sheet</button>',
+ '<input id="vctPhotoFiles" type="file" accept="image/*" multiple style="display:none" aria-label="Choose photos to trace">',
  '<div class="trace-note">Drop the original AI-generated image above. It becomes separate colored SVG vectors, not a raster file. Everything runs on your phone — $0 API cost.</div>',
  '<label for="vctEngine">Trace engine · compare results</label>',
  '<select id="vctEngine"><option value="legacy">Current fast polygon tracer · baseline</option><option value="vtracer">VTracer 1.0 curves · experimental browser WASM</option></select>',
@@ -41,15 +43,15 @@ function initColorFoundry(){
  const picker=$id("svgFiles");
  picker.accept=".svg,image/svg+xml,.png,.jpg,.jpeg,.webp,image/png,image/jpeg,image/webp";
  pile.querySelector("b").textContent="⊕ DROP COLOR IMAGES OR SVGs";
- pile.querySelector("small").textContent="trace 3×3 contact sheets · export separate SVGs";
+ pile.querySelector("small").textContent="Photos, PNG, JPG, WebP and SVG · automatic vector tracing";
  const notify=message=>{$id("vctStatus").textContent=message;};
- const imageRe=/\.(png|jpe?g|webp)$/i;
+ const imageRe=/\.(png|jpe?g|webp|heic|heif|avif)$/i;
  let lastBatch=[];
  async function readImage(file){
   const url=URL.createObjectURL(file),img=new Image();
   try{
    await new Promise((resolve,reject)=>{
-    img.onload=resolve;img.onerror=()=>reject(Error("Couldn't open that image."));
+    img.onload=resolve;img.onerror=()=>reject(Error("Could not decode this photo. On iPhone, try saving or exporting it as PNG or JPEG first."));
     img.src=url;
    });
    if(!img.naturalWidth||!img.naturalHeight)throw Error("Empty image.");
@@ -135,12 +137,18 @@ function initColorFoundry(){
  loadSVGFiles=async function(input){
   const uploads=Array.from(input||[]);
   for(const file of uploads){
-   const isRaster=imageRe.test(file.name)||/^image\/(png|jpeg|webp)$/i.test(file.type);
+   const isRaster=imageRe.test(file.name)||(file.type.startsWith("image/")&&file.type!=="image/svg+xml");
    const isSvg=/\.svg$/i.test(file.name)||file.type==="image/svg+xml";
    if(isRaster||(isSvg&&$id("vctRetraceSVG").checked)){
     try{await vectorizeFile(file);}catch(err){notify("⚠ "+file.name+": "+err.message);toast(err.message);}
    }else if(isSvg){await earlier([file]);}
   }
+ };
+ $id("vctPhotoButton").onclick=()=>$id("vctPhotoFiles").click();
+ $id("vctPhotoFiles").onchange=async event=>{
+  const files=Array.from(event.target.files||[]);
+  event.target.value="";
+  if(files.length)await loadSVGFiles(files);
  };
  $id("vctDownload").onclick=()=>{
   if(!lastBatch.length)return;
