@@ -19,13 +19,13 @@ function initColorFoundry(){
  panel.id="colorFoundry";panel.open=true;
  panel.innerHTML=[
  '<summary>🌈 COLOR VECTOR FOUNDRY · NO CAPTURE NEEDED</summary>',
- '<button id="vctPhotoButton" type="button" class="mint" style="width:100%;margin-top:12px;padding:11px">📸 Choose Photo / 3×3 Contact Sheet</button>',
- '<input id="vctPhotoFiles" type="file" accept="image/*" multiple style="display:none" aria-label="Choose photos to trace">',
- '<div class="trace-note">Drop the original AI-generated image above. It becomes separate colored SVG vectors, not a raster file. Everything runs on your phone — $0 API cost.</div>',
+ '<label id="vctPhotoButton" for="vctPhotoFiles" class="mint" style="display:block;text-align:center;width:100%;margin-top:12px;padding:12px;cursor:pointer">📸 Choose Photo / Contact Sheet</label>',
+ '<input id="vctPhotoFiles" type="file" accept="image/*,.jpg,.jpeg,.png,.webp,.heic,.heif" multiple style="display:block;width:100%;max-width:100%;margin-top:9px" aria-label="Choose photos to trace">',
+ '<div class="trace-note">Choose a JPG or PNG from Photos, or drop one here. It becomes separate <b>COLOR SVGs</b> with transparent white. No Adobe Capture, no API fee. If using an experimental tracing engine, pick it below.</div>',
  '<label for="vctEngine">Trace engine · compare results</label>',
  '<select id="vctEngine"><option value="legacy">Current fast polygon tracer · baseline</option><option value="vtracer">VTracer 1.0 curves · experimental browser WASM</option></select>',
  '<label for="vctLayout">Artwork layout</label>',
- '<select id="vctLayout"><option value="nine">3×3 contact sheet — nine SVGs</option><option value="single">Single design — one SVG</option></select>',
+ '<select id="vctLayout"><option value="nine">3×3 contact sheet — nine SVGs</option><option value="four">2×2 contact sheet — four SVGs</option><option value="single">Single design — one SVG</option></select>',
  '<label for="vctColors">Maximum flat colors per design</label>',
  '<select id="vctColors"><option value="3">3</option><option value="4">4</option><option value="5" selected>5</option><option value="6">6</option><option value="8">8</option></select>',
  '<label for="vctResolution">Trace detail</label>',
@@ -33,7 +33,7 @@ function initColorFoundry(){
  '<label for="vctWhite">Make white transparent</label>',
  '<select id="vctWhite"><option value="236">Aggressive near-white removal</option><option value="245" selected>Normal — recommended</option><option value="253">Only very close to white</option></select>',
  '<label><input type="checkbox" id="vctRetraceSVG"> Re-trace SVGs too (optional; reduces overly dense geometry)</label>',
- '<label><input type="checkbox" id="vctFillKeys" checked> Assign tracings to empty font keys when possible</label>',
+ '<label><input type="checkbox" id="vctFillKeys"> Also convert to black-and-white TTF glyphs (slower)</label>',
  '<button id="vctDownload" type="button" class="mint" disabled>↓ Download last traced SVGs · ZIP</button>',
  '<div id="vctStatus" class="trace-note" role="status" aria-live="polite">Ready: upload a PNG, JPG, WebP, or SVG using the drop area above.</div>',
  '<div id="vctPreviews"></div>',
@@ -56,8 +56,11 @@ function initColorFoundry(){
    });
    if(!img.naturalWidth||!img.naturalHeight)throw Error("Empty image.");
    if(img.naturalWidth*img.naturalHeight>40000000)throw Error("Over 40 million image pixels; please resize the source image.");
+   // Keep the underlying Blob URL alive through every canvas draw on iOS Safari.
+   // Revoking immediately after onload can leave drawImage with no usable pixels.
+   img._dingObjectUrl=url;
    return img;
-  }finally{URL.revokeObjectURL(url);}
+  }catch(err){URL.revokeObjectURL(url);throw err;}
  }
  function cleanBase(name){
   return name.replace(/\.[^.]+$/,"").replace(/[^A-Za-z0-9_-]+/g,"-").slice(0,55)||"ding";
@@ -66,8 +69,10 @@ function initColorFoundry(){
   if(file.size>35000000)throw Error("Over 35 MB. Please resize the original contact sheet.");
   notify("Received "+file.name+" ("+(file.size/1024).toFixed(0)+" KB). Decoding photo…");
   const image=await readImage(file);
-  const n=$id("vctLayout").value==="nine"?9:1;
-  const cols=n===9?3:1;
+  try{
+  const layout=$id("vctLayout").value;
+  const n=layout==="nine"?9:layout==="four"?4:1;
+  const cols=layout==="nine"?3:layout==="four"?2:1;
   const engine=$id("vctEngine").value;
   const detail=engine==="legacy"?Math.min(480,+$id("vctResolution").value):+$id("vctResolution").value;
   const colors=+$id("vctColors").value;
@@ -77,6 +82,7 @@ function initColorFoundry(){
   thumbs.replaceChildren();
   const batch=[],base=cleanBase(file.name);
   notify("Tracing "+n+" design"+(n===1?"":"s")+" locally…");
+  await new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)));
   for(let k=0;k<n;k++){
    const col=k%cols,row=Math.floor(k/cols);
    const x0=Math.round(image.naturalWidth*col/cols),x1=Math.round(image.naturalWidth*(col+1)/cols);
@@ -115,9 +121,22 @@ function initColorFoundry(){
     await new Promise(resolve=>requestAnimationFrame(resolve));continue;
    }
    const label=String(k+1).padStart(2,"0"),id="g"+(++idCounter);
-   const asset=restoreSvgAsset({id,name:base+" · "+label,svg:traced.svg});
+   const convertFont=$id("vctFillKeys").checked;
+   // Keep the fast multicolor SVG workflow separate from monochrome font
+   // outlines. A complex traced sheet should never block nine color exports
+   // simply because an unrelated TTF converter exceeds its point budget.
+   let asset;
+   if(convertFont){
+     asset=restoreSvgAsset({id,name:base+" · "+label,svg:traced.svg});
+   }else{
+     const doc=new DOMParser().parseFromString(traced.svg,"image/svg+xml");
+     const view=(doc.documentElement.getAttribute("viewBox")||"0 0 "+w+" "+h).split(/[\s,]+/).map(Number);
+     const [vx,vy,vw,vh]=view.length===4&&view.every(Number.isFinite)?view:[0,0,w,h];
+     asset={id,name:base+" · "+label,svg:traced.svg,contours:[],warnings:[],
+       colorOnly:true,box:{x0:vx,y0:vy,x1:vx+vw,y1:vy+vh,w:vw,h:vh}};
+   }
    state.assets.push(asset);
-   if($id("vctFillKeys").checked&&asset.contours.length){
+   if(convertFont&&asset.contours.length){
     const key=[..."abcdefghijklmnopqrstuvwxyz1234567890"].find(char=>!state.slots[char]);
     if(key)state.slots[key]={id,x:0,y:0,scale:100,rotation:0};
    }
@@ -132,7 +151,11 @@ function initColorFoundry(){
   if(!batch.length)throw Error("Nothing could be traced. Try a different white threshold or the Single option.");
   lastBatch=batch;$id("vctDownload").disabled=false;
   state.activeAsset=null;render();saveLocal();
-  notify("✓ "+batch.length+" separate SVGs from "+engine+" ready in THE PILE. White is transparent. Download ZIP below. Zero API calls.");
+  notify("✓ "+batch.length+" COLOR SVGs from "+engine+" ready. White transparent. Download ZIP below.");
+  }finally{
+    if(image._dingObjectUrl)URL.revokeObjectURL(image._dingObjectUrl);
+    image.src="";
+  }
  }
  // Catch image drops before the older SVG-only drop handler, so a
  // photo is never silently discarded if the file picker reports a JPEG.
@@ -156,8 +179,8 @@ function initColorFoundry(){
   }
  };
  $id("vctPhotoButton").onclick=()=>{
-  notify("Opening iPhone Photos picker…");
-  $id("vctPhotoFiles").click();
+  // Native LABEL handles the file picker; no synthetic Safari click.
+  notify("Choose a JPG or PNG from Photos…");
  };
  $id("vctPhotoFiles").onchange=async event=>{
   const files=Array.from(event.target.files||[]);
