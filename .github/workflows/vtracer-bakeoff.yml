@@ -1,0 +1,34 @@
+name: Experimental VTracer WASM smoke
+on:
+  push:
+    branches:
+      - experiment/vtracer-worker-bakeoff
+  pull_request:
+    paths:
+      - 'vendor/rastertrace/**'
+      - 'tracing-vtracer.js'
+      - 'color-trace-ui.js'
+      - 'tests/vtracer-wasm-smoke.mjs'
+      - '.github/workflows/vtracer-bakeoff.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  wasm-smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout experiment
+        uses: actions/checkout@v4
+      - name: Use Node 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verify vendored WASM and spline tracing
+        run: node --test tests/vtracer-wasm-smoke.mjs
+      - name: Check Vite build
+        run: |
+          npm install --no-audit --no-fund
+          npm run build
