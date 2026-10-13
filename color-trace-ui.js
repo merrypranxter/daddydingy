@@ -19,6 +19,8 @@ function initColorFoundry(){
  panel.id="colorFoundry";panel.open=true;
  panel.innerHTML=[
  '<summary>🌈 COLOR VECTOR FOUNDRY · NO CAPTURE NEEDED</summary>',
+ '<button id="vctPhotoButton" type="button" class="mint" style="width:100%;margin-top:12px;padding:11px">📸 Choose Photo / 3×3 Contact Sheet</button>',
+ '<input id="vctPhotoFiles" type="file" accept="image/*" multiple style="display:none" aria-label="Choose photos to trace">',
  '<div class="trace-note">Drop the original AI-generated image above. It becomes separate colored SVG vectors, not a raster file. Everything runs on your phone — $0 API cost.</div>',
  '<label for="vctLayout">Artwork layout</label>',
  '<select id="vctLayout"><option value="nine">3×3 contact sheet — nine SVGs</option><option value="single">Single design — one SVG</option></select>',
@@ -39,15 +41,15 @@ function initColorFoundry(){
  const picker=$id("svgFiles");
  picker.accept=".svg,image/svg+xml,.png,.jpg,.jpeg,.webp,image/png,image/jpeg,image/webp";
  pile.querySelector("b").textContent="⊕ DROP COLOR IMAGES OR SVGs";
- pile.querySelector("small").textContent="trace 3×3 contact sheets · export separate SVGs";
+ pile.querySelector("small").textContent="Photos, PNG, JPG, WebP and SVG · automatic vector tracing";
  const notify=message=>{$id("vctStatus").textContent=message;};
- const imageRe=/\.(png|jpe?g|webp)$/i;
+ const imageRe=/\.(png|jpe?g|webp|heic|heif|avif)$/i;
  let lastBatch=[];
  async function readImage(file){
   const url=URL.createObjectURL(file),img=new Image();
   try{
    await new Promise((resolve,reject)=>{
-    img.onload=resolve;img.onerror=()=>reject(Error("Couldn't open that image."));
+    img.onload=resolve;img.onerror=()=>reject(Error("Could not decode this photo. On iPhone, try saving or exporting it as PNG or JPEG first."));
     img.src=url;
    });
    if(!img.naturalWidth||!img.naturalHeight)throw Error("Empty image.");
@@ -60,6 +62,7 @@ function initColorFoundry(){
  }
  async function vectorizeFile(file){
   if(file.size>35000000)throw Error("Over 35 MB. Please resize the original contact sheet.");
+  notify("Received "+file.name+" ("+(file.size/1024).toFixed(0)+" KB). Decoding photo…");
   const image=await readImage(file);
   const n=$id("vctLayout").value==="nine"?9:1;
   const cols=n===9?3:1;
@@ -111,16 +114,37 @@ function initColorFoundry(){
   state.activeAsset=null;render();saveLocal();
   notify("✓ "+batch.length+" separate SVGs ready in THE PILE. White is transparent. Download ZIP below. Zero API calls.");
  }
+ // Catch image drops before the older SVG-only drop handler, so a
+ // photo is never silently discarded if the file picker reports a JPEG.
+ pile.addEventListener("drop",event=>{
+  const files=Array.from(event.dataTransfer?.files||[]);
+  if(!files.some(file=>file.type.startsWith("image/")||imageRe.test(file.name)))return;
+  event.preventDefault();event.stopImmediatePropagation();
+  notify("Photo dropped: "+files.length+" file(s). Starting color tracing…");
+  loadSVGFiles(files).catch(err=>{notify("Photo import error: "+err.message);toast(err.message);});
+ },true);
  const earlier=loadSVGFiles;
  loadSVGFiles=async function(input){
   const uploads=Array.from(input||[]);
   for(const file of uploads){
-   const isRaster=imageRe.test(file.name)||/^image\/(png|jpeg|webp)$/i.test(file.type);
+   const isRaster=imageRe.test(file.name)||(file.type.startsWith("image/")&&file.type!=="image/svg+xml");
    const isSvg=/\.svg$/i.test(file.name)||file.type==="image/svg+xml";
    if(isRaster||(isSvg&&$id("vctRetraceSVG").checked)){
+    notify("Importing "+file.name+" as "+(isSvg?"re-traced SVG":"photo")+"…");
     try{await vectorizeFile(file);}catch(err){notify("⚠ "+file.name+": "+err.message);toast(err.message);}
    }else if(isSvg){await earlier([file]);}
   }
+ };
+ $id("vctPhotoButton").onclick=()=>{
+  notify("Opening iPhone Photos picker…");
+  $id("vctPhotoFiles").click();
+ };
+ $id("vctPhotoFiles").onchange=async event=>{
+  const files=Array.from(event.target.files||[]);
+  event.target.value="";
+  if(!files.length){notify("No photo selected. Choose a JPG or PNG contact sheet.");return;}
+  notify("Photo selected: "+files.map(f=>f.name).join(", ")+". Starting…");
+  try{await loadSVGFiles(files);}catch(err){notify("Photo upload failed: "+err.message);toast(err.message);}
  };
  $id("vctDownload").onclick=()=>{
   if(!lastBatch.length)return;
