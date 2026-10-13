@@ -20,12 +20,14 @@ function initColorFoundry(){
  panel.innerHTML=[
  '<summary>🌈 COLOR VECTOR FOUNDRY · NO CAPTURE NEEDED</summary>',
  '<div class="trace-note">Drop the original AI-generated image above. It becomes separate colored SVG vectors, not a raster file. Everything runs on your phone — $0 API cost.</div>',
+ '<label for="vctEngine">Trace engine · compare results</label>',
+ '<select id="vctEngine"><option value="legacy">Current fast polygon tracer · baseline</option><option value="vtracer">VTracer 1.0 curves · experimental browser WASM</option></select>',
  '<label for="vctLayout">Artwork layout</label>',
  '<select id="vctLayout"><option value="nine">3×3 contact sheet — nine SVGs</option><option value="single">Single design — one SVG</option></select>',
  '<label for="vctColors">Maximum flat colors per design</label>',
  '<select id="vctColors"><option value="3">3</option><option value="4">4</option><option value="5" selected>5</option><option value="6">6</option><option value="8">8</option></select>',
  '<label for="vctResolution">Trace detail</label>',
- '<select id="vctResolution"><option value="260">Compact — smaller files</option><option value="360" selected>Detailed — recommended</option><option value="480">Maximum detail — slower</option></select>',
+ '<select id="vctResolution"><option value="260">Compact — smaller files</option><option value="360" selected>Detailed — recommended</option><option value="480">Maximum detail — slower</option><option value="1024">High fidelity · 1024 px (VTracer only)</option></select>',
  '<label for="vctWhite">Make white transparent</label>',
  '<select id="vctWhite"><option value="236">Aggressive near-white removal</option><option value="245" selected>Normal — recommended</option><option value="253">Only very close to white</option></select>',
  '<label><input type="checkbox" id="vctRetraceSVG"> Re-trace SVGs too (optional; reduces overly dense geometry)</label>',
@@ -63,7 +65,8 @@ function initColorFoundry(){
   const image=await readImage(file);
   const n=$id("vctLayout").value==="nine"?9:1;
   const cols=n===9?3:1;
-  const detail=+$id("vctResolution").value;
+  const engine=$id("vctEngine").value;
+  const detail=engine==="legacy"?Math.min(480,+$id("vctResolution").value):+$id("vctResolution").value;
   const colors=+$id("vctColors").value;
   const white=+$id("vctWhite").value;
   const simplify=detail===260?.95:detail===360?.65:.40;
@@ -86,9 +89,26 @@ function initColorFoundry(){
    ctx.drawImage(image,x0,y0,sw,sh,0,0,w,h);
    let traced;
    try{
-    traced=window.DaddyDingyTraceColors.trace(ctx.getImageData(0,0,w,h).data,w,h,colors,white,simplify);
+    const img=ctx.getImageData(0,0,w,h);
+    if(engine==="vtracer"){
+      if(!window.DaddyDingyVTracer)throw Error("VTracer adapter not loaded.");
+      const result=await window.DaddyDingyVTracer.trace(img,{
+        colors,fuzz:white===236?25:white===253?8:16,
+        onProgress:stage=>notify("VTracer "+(k+1)+"/"+n+" · "+stage)
+      });
+      traced={
+        svg:result.svg,bytes:new TextEncoder().encode(result.svg).length,
+        layers:(result.svg.match(/<path\\b/g)||[]).length,ms:result.ms
+      };
+    }else{
+      const start=performance.now();
+      traced=window.DaddyDingyTraceColors.trace(img.data,w,h,colors,white,simplify);
+      traced.ms=Math.round(performance.now()-start);
+    }
+    if(!traced.svg||!traced.svg.includes("<path"))throw Error("No vector paths in result.");
    }catch(e){
-    notify("Design "+(k+1)+" skipped: "+e.message);
+    notify("Design "+(k+1)+" · "+engine+" engine failed: "+e.message);
+    toast("Trace error: "+e.message);
     await new Promise(resolve=>requestAnimationFrame(resolve));continue;
    }
    const label=String(k+1).padStart(2,"0"),id="g"+(++idCounter);
@@ -103,13 +123,13 @@ function initColorFoundry(){
    picture.alt="Vector design "+label;
    picture.src="data:image/svg+xml;charset=utf-8,"+encodeURIComponent(traced.svg);
    thumbs.append(picture);
-   notify("Vectorized "+(k+1)+"/"+n+" · "+(traced.bytes/1000).toFixed(0)+" KB latest · "+traced.layers+" colors.");
+   notify("Vectorized "+(k+1)+"/"+n+" · "+engine+" · "+(traced.bytes/1000).toFixed(0)+" KB SVG · "+traced.layers+" paths · "+(traced.ms??"?")+" ms.");
    await new Promise(resolve=>requestAnimationFrame(resolve));
   }
   if(!batch.length)throw Error("Nothing could be traced. Try a different white threshold or the Single option.");
   lastBatch=batch;$id("vctDownload").disabled=false;
   state.activeAsset=null;render();saveLocal();
-  notify("✓ "+batch.length+" separate SVGs ready in THE PILE. White is transparent. Download ZIP below. Zero API calls.");
+  notify("✓ "+batch.length+" separate SVGs from "+engine+" ready in THE PILE. White is transparent. Download ZIP below. Zero API calls.");
  }
  const earlier=loadSVGFiles;
  loadSVGFiles=async function(input){
