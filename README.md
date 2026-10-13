@@ -4,6 +4,24 @@ Local-first SVG-to-TTF dingbat font maker for SparkleBae.
 
 Import Illustrator SVGs, assign ornaments to keyboard keys, tweak placement/size/rotation, preview live typing, save editable projects, and export a real TrueType font.
 
+
+## 🌈 Individual multicolor SVG export (new — review branch)
+
+The **Sheet Harvester** now supports flat-color SVG sheets (including 3×3 designs traced in Adobe Capture). **Fonts stay black-and-white** because TrueType outlines do not encode arbitrary SVG color layers; independent SVG exports preserve paint.
+
+- From THE PILE, select a design and use **↓ Selected SVG**.
+- Use **↓ All SVGs · ZIP** to obtain each extracted design separately.
+- Keep **Preserve original colors** enabled in the Sheet Harvester.
+- The harvester detects bright colored shapes (including yellow and cyan), and attempts to separate compound paths from different cells without removing curves or dots.
+- Export mode **Auto** aims for **under 2 MB per SVG** by dropping nonvisual metadata and reducing path-coordinate decimal precision only when useful. It does not delete anchor points. Other modes: **Maximum fidelity** and **Compact (3 decimals)**.
+- If an individual SVG stays above 2 MB, Daddy Dingy **reports the size and preserves the artwork** instead of silently wrecking it. DingWings accepts larger files (up to 35 MB, device performance permitting).
+- Dense SVGs which cannot be converted to font outlines stay in the pile as **SVG ONLY** and can still be exported or saved inside a project JSON. Don't assign SVG-only art to font keys.
+- **🪚 Clean Capture SVG** removes extra comments and metadata from a downloaded original SVG without reducing its point count. It won't fix geometry-heavy files by itself.
+
+**Reality checks:** A truly enormous original can still overload a phone; complex SVG masks, embedded bitmap images, unsupported SVG filters, and artwork spanning multiple grid cells may not separate faithfully. Inspect the nine exports, especially fine holes and overlapping shapes. Color SVG processing is best effort, and export does not guarantee a 2 MB result for arbitrarily complex paths.
+
+**Keep your original master file.** For giant batches, use **Save project** manually; browser localStorage autosave may run out of quota.
+
 ## ✂ Sheet Harvester
 
 **No individual export marathon required.**
