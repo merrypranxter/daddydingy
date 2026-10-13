@@ -98,7 +98,7 @@ function initColorFoundry(){
       });
       traced={
         svg:result.svg,bytes:new TextEncoder().encode(result.svg).length,
-        layers:(result.svg.match(/<path\\b/g)||[]).length,ms:result.ms
+        layers:(result.svg.match(/<path\b/g)||[]).length,ms:result.ms
       };
     }else{
       const start=performance.now();
