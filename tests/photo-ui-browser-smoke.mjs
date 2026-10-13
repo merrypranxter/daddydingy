@@ -25,10 +25,10 @@ try{
       context.fillStyle="white";
       context.beginPath();context.arc(cx,cy,20,0,Math.PI*2);context.fill();
    }
-   return canvas.toDataURL("image/png").split(",")[1];
+   return canvas.toDataURL("image/jpeg",0.92).split(",")[1];
  });
  const image=Buffer.from(pngData,"base64");
- await page.locator("#vctPhotoFiles").setInputFiles([{name:"nine-tentacle-test.png",mimeType:"image/png",buffer:image}]);
+ await page.locator("#vctPhotoFiles").setInputFiles([{name:"nine-tentacle-test.jpeg",mimeType:"image/jpeg",buffer:image}]);
  await page.waitForFunction(()=>document.querySelectorAll("#vctPreviews img").length===9,null,{timeout:120000});
  const status=await page.locator("#vctStatus").innerText();
  assert.match(status,/9 separate SVGs|9.*ready/i);
