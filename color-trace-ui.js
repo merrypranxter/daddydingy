@@ -42,8 +42,8 @@ function initColorFoundry(){
  pile.after(panel);
  const picker=$id("svgFiles");
  picker.accept=".svg,image/svg+xml,.png,.jpg,.jpeg,.webp,image/png,image/jpeg,image/webp";
- pile.querySelector("b").textContent="⊕ DROP COLOR IMAGES OR SVGs";
- pile.querySelector("small").textContent="Photos, PNG, JPG, WebP and SVG · automatic vector tracing";
+ pile.querySelector("b").textContent="⊕ UPLOAD PHOTO OR SVG";
+ pile.querySelector("small").textContent="photos auto-trace · SVGs preserve vector shapes";
  const notify=message=>{$id("vctStatus").textContent=message;};
  const imageRe=/\.(png|jpe?g|webp|heic|heif|avif)$/i;
  let lastBatch=[];
@@ -166,6 +166,11 @@ function initColorFoundry(){
   notify("Photo dropped: "+files.length+" file(s). Starting color tracing…");
   loadSVGFiles(files).catch(err=>{notify("Photo import error: "+err.message);toast(err.message);});
  },true);
+ window.dingyImportRasterArtwork=async file=>{
+   notify("Received "+file.name+" · "+Math.round(file.size/1024)+" KB. Starting color tracing…");
+   try{await vectorizeFile(file);}
+   catch(err){notify("Photo tracing failed: "+err.message);toast("Photo trace error: "+err.message);throw err;}
+ };
  const earlier=loadSVGFiles;
  loadSVGFiles=async function(input){
   const uploads=Array.from(input||[]);
@@ -173,9 +178,9 @@ function initColorFoundry(){
    const isRaster=imageRe.test(file.name)||(file.type.startsWith("image/")&&file.type!=="image/svg+xml");
    const isSvg=/\.svg$/i.test(file.name)||file.type==="image/svg+xml";
    if(isRaster||(isSvg&&$id("vctRetraceSVG").checked)){
-    notify("Importing "+file.name+" as "+(isSvg?"re-traced SVG":"photo")+"…");
-    try{await vectorizeFile(file);}catch(err){notify("⚠ "+file.name+": "+err.message);toast(err.message);}
+     try{await window.dingyImportRasterArtwork(file);}catch(err){}
    }else if(isSvg){await earlier([file]);}
+   else notify("Unsupported file: "+file.name+". Choose a photo or SVG.");
   }
  };
  $id("vctPhotoButton").onclick=()=>{
