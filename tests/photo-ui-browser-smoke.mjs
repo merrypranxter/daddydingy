@@ -33,7 +33,7 @@ try{
  });
  const image=Buffer.from(pngData,"base64");
  await page.locator("#vctPhotoFiles").setInputFiles([{name:"nine-tentacle-test.jpeg",mimeType:"image/jpeg",buffer:image}]);
- await page.waitForFunction(()=>document.querySelectorAll("#vctPreviews img").length===9,null,{timeout:120000});
+ await page.waitForFunction(()=>document.querySelectorAll("#vctPreviews img").length===9&&document.querySelector("#vctDownload")?.disabled===false&&/COLOR SVGs ready/.test(document.querySelector("#vctStatus")?.textContent||""),null,{timeout:120000});
  const status=await page.locator("#vctStatus").innerText();
  assert.match(status,/9 separate SVGs|9.*ready/i);
  assert.equal(await page.locator("#vctDownload").isDisabled(),false);
