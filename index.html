@@ -12,7 +12,7 @@
 <header class="header"><div><div class="eyebrow">ASTRAL TRASH TOOLS / personal font laboratory</div><h1>DADDY <span>DINGY</span> ✳</h1><p class="tagline">Your SVGs. Your keyboard. Your beautiful little mutant font.</p></div><div class="actions"><button id="saveProject">↡ Save project</button><button id="loadProject">↟ Open project</button><button class="primary" id="exportFont">✦ EXPORT .TTF</button></div></header>
 <div class="info-banner"><span class="dot"></span>Everything runs <b>inside your browser</b>. Your files aren't uploaded anywhere. SVG fills become solid font shapes; stroke-only lines and clipping masks should be expanded in Illustrator first.</div>
 <div class="pagegrid">
-<section class="panel"><div class="panel-head"><h2>01 / THE PILE</h2><span class="count" id="assetCount">0 SVGs</span></div><div class="panel-content"><div class="drop" id="drop"><b>⊕ DROP SVGs HERE</b><small>or tap to select a whole batch</small></div><div class="stack" style="margin-bottom:12px"><button id="demo" class="tiny">✳ Load demo dings</button><button id="captureClean" class="tiny" title="Clean extra Adobe metadata without changing traced geometry">🪚 Clean Capture SVG</button><button id="exportSelectedSVG" class="tiny mint" title="Export selected ornament as a vector SVG">↓ Selected SVG</button><button id="exportAllSVG" class="tiny lime" title="Download one optimized SVG per ornament as a ZIP">↓ All SVGs · ZIP</button><button id="clearAll" class="tiny">Clear all</button></div><div id="assetList" class="svg-list"></div><p class="hint">Full-color SVG export keeps paint and details. Daddy Dingy optimizes each file toward 2 MB; anything larger is flagged, not destroyed.</p><label class="slider-label" for="svgQuality">SVG size strategy</label><select id="svgQuality" style="width:100%;margin-bottom:7px;background:#170d2a;color:#fef6ff;padding:8px;border:1px solid #51416f;border-radius:9px"><option value="auto">Auto · target 2 MB, protect detail</option><option value="max">Maximum fidelity · no rounding</option><option value="compact">Compact · 3-decimal paths</option></select><div id="exportReport" class="hint" aria-live="polite">Nine designs in → nine individual SVGs out. All processing stays on-device.</div></div></section>
+<section class="panel"><div class="panel-head"><h2>01 / THE PILE</h2><span class="count" id="assetCount">0 SVGs</span></div><div class="panel-content"><div class="drop" id="drop"><b>⊕ DROP SVGs HERE</b><small>or tap to select a whole batch</small></div><div class="stack" style="margin-bottom:12px"><button id="demo" class="tiny">✳ Load demo dings</button><button id="captureClean" class="tiny" title="Clean extra Adobe metadata without changing traced geometry">🪚 Clean Capture SVG</button><button id="clearWhiteBacking" class="tiny mint" title="Export selected colorful SVG with a transparent background, preserving other shapes">⬜ Remove white backing</button><button id="exportSelectedSVG" class="tiny mint" title="Export selected ornament as a vector SVG">↓ Selected SVG</button><button id="exportAllSVG" class="tiny lime" title="Download one optimized SVG per ornament as a ZIP">↓ All SVGs · ZIP</button><button id="clearAll" class="tiny">Clear all</button></div><div id="assetList" class="svg-list"></div><p class="hint">Full-color SVG export keeps paint and details. Daddy Dingy optimizes each file toward 2 MB; anything larger is flagged, not destroyed.</p><label class="slider-label" for="svgQuality">SVG size strategy</label><select id="svgQuality" style="width:100%;margin-bottom:7px;background:#170d2a;color:#fef6ff;padding:8px;border:1px solid #51416f;border-radius:9px"><option value="auto">Auto · target 2 MB, protect detail</option><option value="max">Maximum fidelity · no rounding</option><option value="compact">Compact · 3-decimal paths</option></select><div id="exportReport" class="hint" aria-live="polite">Nine designs in → nine individual SVGs out. All processing stays on-device.</div><p class="hint">⬜ Remove white backing creates a NEW transparent SVG. It removes only a confidently detected full-canvas white vector backdrop. Original stays untouched.</p></div></section>
 <section class="panel"><div class="panel-head"><h2>02 / KEYBOARD CHAOS</h2><div class="mode" role="group" aria-label="Keyboard layer"><button id="normalMode" class="active">normal</button><button id="shiftMode">SHIFT</button></div></div><div class="panel-content"><p class="hint" id="keyHint">Click a key to edit it. Pick an icon from the left first to stamp it onto a key.</p><div id="keyboard" class="keyboard"></div><div class="stack" style="justify-content:space-between;align-items:center;margin-top:6px"><span class="count" id="slotCount">0 keys assigned</span><button class="tiny" id="unassign">✕ Empty selected key</button></div><div class="type-test"><label class="slider-label" for="testText"><span>03 / TEST YOUR NONSENSE</span><span class="help">live glyph preview</span></label><input id="testText" type="text" value="Sparkle Bae 123!" maxlength="48" placeholder="Type random shit here"><div class="test-strip" id="testStrip"></div></div><div class="footer">Want A and a to be different shapes? Use the SHIFT layer. A shifted key is a separate glyph, not an automatic copy.</div></div></section>
 <section class="panel editor"><div class="panel-head"><h2>04 / GLYPH SURGERY</h2><span class="count" id="selectedName">Choose a key</span></div><div class="panel-content editgrid"><div class="workbench"><svg class="stage-svg" id="stage" viewBox="0 0 1000 1000" xmlns="http://www.w3.org/2000/svg" aria-label="Drag glyph to reposition"><rect x="0" y="0" width="1000" height="1000" fill="#f7f5ed"/><rect x="65" y="55" width="870" height="870" fill="none" stroke="#c8c0d1" stroke-width="2" stroke-dasharray="8 9"/><path d="M0 800H1000" stroke="#e562a0" stroke-width="3" stroke-dasharray="14 9"/><path d="M500 0V1000" stroke="#d5cddc" stroke-width="2" stroke-dasharray="7 15"/><path id="stageGlyph" d="" fill="#160d22" fill-rule="nonzero"/></svg><div class="canvas-info"><span>↔ drag to position</span><span>pink = baseline</span></div></div><div><div class="sliders"><label><div class="slider-label"><span>Size</span><output id="sizeOut">100%</output></div><input type="range" id="size" min="20" max="230" value="100" step="1"></label><label><div class="slider-label"><span>Horizontal</span><output id="xOut">0</output></div><input type="range" id="x" min="-350" max="350" value="0" step="1"></label><label><div class="slider-label"><span>Vertical</span><output id="yOut">0</output></div><input type="range" id="y" min="-350" max="350" value="0" step="1"></label><label><div class="slider-label"><span>Rotate</span><output id="rotationOut">0°</output></div><input type="range" id="rotation" min="-180" max="180" value="0" step="1"></label></div><div class="stack" style="margin-top:13px"><button id="resetGlyph" class="tiny">↺ Reset position</button><button id="copyMapping" class="tiny">Copy key map</button></div><p class="hint" id="editorInfo" style="margin-top:12px">Adjust each key independently, or drag directly on the canvas.</p><label for="fontName" class="slider-label" style="margin-top:14px">FONT NAME</label><input id="fontName" type="text" value="Astral Trash Dings" maxlength="40" style="width:100%;margin-top:6px" autocomplete="off"></div></div></section>
 </div><footer class="footer">DADDY DINGY v1.3 · Color-preserving SVG + ZIP · 2 MB target, no point deletion · save a project JSON for giant sheets · 0 API cost.</footer>
@@ -278,6 +278,87 @@ function updateSvgExportReport(results){
    (overs.length?' · '+overs.length+' still over 2 MB (kept intact; DingWings accepts larger SVGs)':' · all under 2 MB')+
    ' · no shapes deleted.';
 }
+
+// Conservative background removal for SVGs imported from Adobe Capture.
+// Never converts pixels to a bitmap or mutates the source asset.
+function removeFullCanvasWhiteBacking(sourceSvg){
+  const doc=new DOMParser().parseFromString(sourceSvg,'image/svg+xml');
+  const root=doc.documentElement;
+  if(root.localName!=='svg'||doc.querySelector('parsererror'))throw Error('This is not a valid SVG.');
+  const originalWidth=root.getAttribute('width'),originalHeight=root.getAttribute('height');
+  const v=(root.getAttribute('viewBox')||'').trim().split(/[\s,]+/).map(Number);
+  const view=v.length===4&&v.every(Number.isFinite)&&v[2]>0&&v[3]>0
+    ?{x:v[0],y:v[1],w:v[2],h:v[3]} : null;
+  if(!view)throw Error('SVG has no measurable viewBox. Send me the file so I can inspect it.');
+  const box=document.createElement('div');
+  box.style.cssText='position:fixed;left:-10000px;top:0;width:650px;height:650px;visibility:hidden;pointer-events:none;';
+  root.setAttribute('width','650');root.setAttribute('height','650');
+  box.appendChild(root);
+  document.body.appendChild(box);
+  const white=s=>{
+    const normalized=String(s||'').trim().toLowerCase().replace(/\s+/g,'');
+    return normalized==='white'||normalized==='#fff'||normalized==='#ffffff'||
+      normalized==='#ffffffff'||normalized==='rgb(255,255,255)'||
+      normalized==='rgba(255,255,255,1)';
+  };
+  const types='rect,path,polygon,polyline,circle,ellipse';
+  let removed=0,protectedCompounds=0,unmeasured=0;
+  try{
+    const rootMatrix=root.getCTM();
+    if(!rootMatrix)throw Error('Browser could not inspect SVG coordinates.');
+    const inverse=rootMatrix.inverse();
+    for(const el of [...root.querySelectorAll(types)]){
+      if(el.closest('defs,clipPath,mask,filter,symbol,pattern'))continue;
+      const style=getComputedStyle(el);
+      if(!white(style.fill)||Number(style.opacity||1)<.99||Number(style.fillOpacity||1)<.99)continue;
+      try{
+        const b=el.getBBox();
+        const own=el.getCTM();
+        if(!own)continue;
+        const mat=inverse.multiply(own);
+        const pts=[[b.x,b.y],[b.x+b.width,b.y],[b.x,b.y+b.height],[b.x+b.width,b.y+b.height]]
+          .map(([x,y])=>new DOMPoint(x,y).matrixTransform(mat));
+        const xs=pts.map(p=>p.x),ys=pts.map(p=>p.y);
+        const left=Math.min(...xs),right=Math.max(...xs),top=Math.min(...ys),bottom=Math.max(...ys);
+        // Must touch every canvas edge within 5% and cover at least 94% each axis.
+        const covers=left<=view.x+view.w*.05&&right>=view.x+view.w*.95&&
+          top<=view.y+view.h*.05&&bottom>=view.y+view.h*.95&&
+          (right-left)>=view.w*.94&&(bottom-top)>=view.h*.94;
+        if(!covers)continue;
+        if(el.localName==='path'&&((el.getAttribute('d')||'').match(/[Mm]/g)||[]).length>1){
+          protectedCompounds++;continue;
+        }
+        el.remove();removed++;
+      }catch(e){unmeasured++;}
+    }
+  }finally{
+    box.remove();
+    if(originalWidth===null)root.removeAttribute('width');else root.setAttribute('width',originalWidth);
+    if(originalHeight===null)root.removeAttribute('height');else root.setAttribute('height',originalHeight);
+  }
+  root.setAttribute('xmlns',NS);
+  return {svg:new XMLSerializer().serializeToString(root),removed,protectedCompounds,unmeasured};
+}
+$('clearWhiteBacking').onclick=()=>{
+  const id=state.activeAsset||state.slots[state.selectedKey]?.id;
+  const asset=state.assets.find(a=>a.id===id);
+  if(!asset){toast('Select a colorful icon from THE PILE, or a populated key, first.');return;}
+  try{
+    const result=removeFullCanvasWhiteBacking(exportedDingSvg(asset));
+    if(!result.removed){
+      const msg=result.protectedCompounds?'White paint was mixed into a compound path; not safe to auto-delete.':
+       'Could not identify a full-canvas white vector shape. White may be inside the artwork or baked into an embedded image.';
+      $('exportReport').textContent=msg;
+      toast(msg);
+      return;
+    }
+    const clean=optimizedDing({svg:result.svg,contours:asset.contours});
+    download(clean.svg,safeDingFileName(asset.name)+'-transparent.svg','image/svg+xml');
+    updateSvgExportReport([clean]);
+    toast('Removed '+result.removed+' white background shape(s) · transparent SVG exported. Original unchanged.');
+  }catch(e){toast('Could not remove white backing: '+e.message);}
+};
+
 function exportedDingSvg(asset) {
   // Imported standalone SVGs retain their full-color paint. Sheet-harvested
   // assets are already separate monochrome vector SVGs generated by the harvester.
