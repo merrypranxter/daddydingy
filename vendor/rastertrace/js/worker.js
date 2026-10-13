@@ -1,5 +1,6 @@
 // Web Worker: runs preprocessing + wasm tracing off the main thread.
-import init, { trace } from "../pkg/rastertrace_wasm.js?v=43";
+import init, { trace } from "../pkg/rastertrace_wasm.js";
+import { browserVtracerWasm } from "../pkg/wasm-inline.js";
 import {
   applyStencilInk,
   binarizeAlpha,
@@ -14,14 +15,12 @@ import {
   straightenPaths,
   thresholdImage,
   toGrayscale,
-} from "./preprocess.js?v=48";
+} from "./preprocess.js";
 
 // Explicit versioned URL: the glue's own wasm fetch drops the ?v= query,
 // so a rebuilt binary would otherwise be served from stale browser cache
 // against new glue (positional args shift into garbage).
-const ready = init({
-  module_or_path: new URL("../pkg/rastertrace_wasm_bg.wasm?v=43", import.meta.url),
-});
+const ready = init({module_or_path:browserVtracerWasm()});
 
 self.onmessage = async (event) => {
   const { id, img, settings, sourceWidth, sourceHeight } = event.data;
