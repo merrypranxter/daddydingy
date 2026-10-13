@@ -479,17 +479,36 @@ render();
       const rootMatrix=root.getCTM();
       if(!rootMatrix)throw Error('SVG geometry not measurable');
       const inv=rootMatrix.inverse();
+      function withinCell(el){
+        const b=el.getBBox(),matrix=inv.multiply(el.getCTM());
+        const corners=[[b.x,b.y],[b.x+b.width,b.y],[b.x,b.y+b.height],[b.x+b.width,b.y+b.height]]
+          .map(([x,y])=>new DOMPoint(x,y).matrixTransform(matrix));
+        const xs=corners.map(p=>p.x),ys=corners.map(p=>p.y);
+        const x0=Math.min(...xs),x1=Math.max(...xs),y0=Math.min(...ys),y1=Math.max(...ys);
+        const coversSheet=(x1-x0)>fullView.w*.92&&(y1-y0)>fullView.h*.92;
+        const midx=(x0+x1)/2,midy=(y0+y1)/2;
+        return !coversSheet && midx>=cell.x && midx<=cell.x+cell.w &&
+          midy>=cell.y && midy<=cell.y+cell.h;
+      }
       for(const el of graphics){
         let keep=false;
         try{
-          const b=el.getBBox(),matrix=inv.multiply(el.getCTM());
-          const corners=[[b.x,b.y],[b.x+b.width,b.y],[b.x,b.y+b.height],[b.x+b.width,b.y+b.height]]
-            .map(([x,y])=>new DOMPoint(x,y).matrixTransform(matrix));
-          const xs=corners.map(p=>p.x),ys=corners.map(p=>p.y);
-          const x0=Math.min(...xs),x1=Math.max(...xs),y0=Math.min(...ys),y1=Math.max(...ys);
-          const coversSheet=(x1-x0)>fullView.w*.92&&(y1-y0)>fullView.h*.92;
-          const midx=(x0+x1)/2,midy=(y0+y1)/2;
-          keep=!coversSheet&&midx>=cell.x&&midx<=cell.x+cell.w&&midy>=cell.y&&midy<=cell.y+cell.h;
+          // Capture often stores disconnected artwork from every cell in ONE
+          // compound path per paint color. Split at absolute moveto commands,
+          // preserving all interior coordinates and fill-rule for holes.
+          if(el.localName==='path'){
+            const fullD=(el.getAttribute('d')||'').trim();
+            const subpaths=fullD[0]==='M'?fullD.match(/M[^M]*/g):null;
+            if(subpaths && subpaths.length>1){
+              const kept=[];
+              for(const sub of subpaths){
+                el.setAttribute('d',sub);
+                if(withinCell(el))kept.push(sub);
+              }
+              if(kept.length){el.setAttribute('d',kept.join(' '));keep=true;}
+              else el.removeAttribute('d');
+            }else keep=withinCell(el);
+          }else keep=withinCell(el);
         }catch(e){keep=false;}
         if(!keep)el.remove();else selected++;
       }
