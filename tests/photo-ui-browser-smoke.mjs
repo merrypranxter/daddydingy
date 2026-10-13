@@ -1,8 +1,9 @@
 import assert from "node:assert/strict";
-import { chromium } from "playwright";
+import { chromium, webkit } from "playwright";
 
 const url=process.env.TEST_URL||"http://127.0.0.1:4173/";
-const browser=await chromium.launch({headless:true});
+const engine=process.env.PLAYWRIGHT_BROWSER==="webkit"?webkit:chromium;
+const browser=await engine.launch({headless:true});
 const page=await browser.newPage({viewport:{width:390,height:844},hasTouch:true,isMobile:true});
 const errors=[];
 page.on("pageerror",error=>errors.push(String(error)));
@@ -12,6 +13,9 @@ try{
  await page.locator("#vctPhotoFiles").waitFor({state:"attached",timeout:15000});
  assert.match(await page.locator("#drop").innerText(),/PHOTO/i);
  assert.ok(await page.locator("#vctPhotoButton").count(),"direct photo button exists");
+ assert.equal(await page.locator("#vctPhotoFiles").isVisible(),true,"native photo input is visible, not hidden");
+ assert.equal(await page.locator("#vctFillKeys").isChecked(),false,"TTF conversion must be opt-in");
+ assert.equal(await page.locator("#vctPhotoButton").getAttribute("for"),"vctPhotoFiles");
  const pngData=await page.evaluate(()=>{
    const canvas=document.createElement("canvas");canvas.width=1254;canvas.height=1254;
    const context=canvas.getContext("2d");context.fillStyle="white";context.fillRect(0,0,1254,1254);
@@ -34,8 +38,12 @@ try{
  assert.match(status,/9 separate SVGs|9.*ready/i);
  assert.equal(await page.locator("#vctDownload").isDisabled(),false);
  assert.equal(await page.locator("#vctPreviews img").count(),9);
+ assert.equal(await page.locator("#assetList .svg-tile").count(),9,"nine individual color SVG assets in pile");
+ assert.equal(await page.locator("#assetList .svg-tile").first().innerText().then(s=>s.includes("COLOR SVG")),true,"color SVG assets are labeled, not converted into monochrome fonts");
+ await page.locator("#vctLayout").selectOption("four");
+ assert.equal(await page.locator("#vctLayout").inputValue(),"four","2x2 sheets supported");
  assert.equal(errors.length,0,errors.join("\n"));
- console.log("PASS mobile-sized raster → 9 SVG preview assets:",status);
+ console.log("PASS "+(process.env.PLAYWRIGHT_BROWSER||"chromium")+" iPhone-sized JPEG → nine color SVG assets:",status);
 }finally{
  await browser.close();
 }
