@@ -12,10 +12,10 @@
 <header class="header"><div><div class="eyebrow">ASTRAL TRASH TOOLS / personal font laboratory</div><h1>DADDY <span>DINGY</span> ✳</h1><p class="tagline">Your SVGs. Your keyboard. Your beautiful little mutant font.</p></div><div class="actions"><button id="saveProject">↡ Save project</button><button id="loadProject">↟ Open project</button><button class="primary" id="exportFont">✦ EXPORT .TTF</button></div></header>
 <div class="info-banner"><span class="dot"></span>Everything runs <b>inside your browser</b>. Your files aren't uploaded anywhere. SVG fills become solid font shapes; stroke-only lines and clipping masks should be expanded in Illustrator first.</div>
 <div class="pagegrid">
-<section class="panel"><div class="panel-head"><h2>01 / THE PILE</h2><span class="count" id="assetCount">0 SVGs</span></div><div class="panel-content"><div class="drop" id="drop"><b>⊕ DROP SVGs HERE</b><small>or tap to select a whole batch</small></div><div class="stack" style="margin-bottom:12px"><button id="demo" class="tiny">✳ Load demo dings</button><button id="clearAll" class="tiny">Clear all</button></div><div id="assetList" class="svg-list"></div><p class="hint">Select an icon here, then click any key to assign it. Same icon can occupy multiple keys.</p></div></section>
+<section class="panel"><div class="panel-head"><h2>01 / THE PILE</h2><span class="count" id="assetCount">0 SVGs</span></div><div class="panel-content"><div class="drop" id="drop"><b>⊕ DROP SVGs HERE</b><small>or tap to select a whole batch</small></div><div class="stack" style="margin-bottom:12px"><button id="demo" class="tiny">✳ Load demo dings</button><button id="exportSelectedSVG" class="tiny mint" title="Export selected ornament as a vector SVG">↓ Selected SVG</button><button id="exportAllSVG" class="tiny lime" title="Download one SVG per ornament as a ZIP">↓ All SVGs · ZIP</button><button id="clearAll" class="tiny">Clear all</button></div><div id="assetList" class="svg-list"></div><p class="hint">Select an icon to export its own SVG, or download the entire pile in a ZIP. Imported colorful SVGs keep their original fills on SVG export; font outlines stay monochrome.</p></div></section>
 <section class="panel"><div class="panel-head"><h2>02 / KEYBOARD CHAOS</h2><div class="mode" role="group" aria-label="Keyboard layer"><button id="normalMode" class="active">normal</button><button id="shiftMode">SHIFT</button></div></div><div class="panel-content"><p class="hint" id="keyHint">Click a key to edit it. Pick an icon from the left first to stamp it onto a key.</p><div id="keyboard" class="keyboard"></div><div class="stack" style="justify-content:space-between;align-items:center;margin-top:6px"><span class="count" id="slotCount">0 keys assigned</span><button class="tiny" id="unassign">✕ Empty selected key</button></div><div class="type-test"><label class="slider-label" for="testText"><span>03 / TEST YOUR NONSENSE</span><span class="help">live glyph preview</span></label><input id="testText" type="text" value="Sparkle Bae 123!" maxlength="48" placeholder="Type random shit here"><div class="test-strip" id="testStrip"></div></div><div class="footer">Want A and a to be different shapes? Use the SHIFT layer. A shifted key is a separate glyph, not an automatic copy.</div></div></section>
 <section class="panel editor"><div class="panel-head"><h2>04 / GLYPH SURGERY</h2><span class="count" id="selectedName">Choose a key</span></div><div class="panel-content editgrid"><div class="workbench"><svg class="stage-svg" id="stage" viewBox="0 0 1000 1000" xmlns="http://www.w3.org/2000/svg" aria-label="Drag glyph to reposition"><rect x="0" y="0" width="1000" height="1000" fill="#f7f5ed"/><rect x="65" y="55" width="870" height="870" fill="none" stroke="#c8c0d1" stroke-width="2" stroke-dasharray="8 9"/><path d="M0 800H1000" stroke="#e562a0" stroke-width="3" stroke-dasharray="14 9"/><path d="M500 0V1000" stroke="#d5cddc" stroke-width="2" stroke-dasharray="7 15"/><path id="stageGlyph" d="" fill="#160d22" fill-rule="nonzero"/></svg><div class="canvas-info"><span>↔ drag to position</span><span>pink = baseline</span></div></div><div><div class="sliders"><label><div class="slider-label"><span>Size</span><output id="sizeOut">100%</output></div><input type="range" id="size" min="20" max="230" value="100" step="1"></label><label><div class="slider-label"><span>Horizontal</span><output id="xOut">0</output></div><input type="range" id="x" min="-350" max="350" value="0" step="1"></label><label><div class="slider-label"><span>Vertical</span><output id="yOut">0</output></div><input type="range" id="y" min="-350" max="350" value="0" step="1"></label><label><div class="slider-label"><span>Rotate</span><output id="rotationOut">0°</output></div><input type="range" id="rotation" min="-180" max="180" value="0" step="1"></label></div><div class="stack" style="margin-top:13px"><button id="resetGlyph" class="tiny">↺ Reset position</button><button id="copyMapping" class="tiny">Copy key map</button></div><p class="hint" id="editorInfo" style="margin-top:12px">Adjust each key independently, or drag directly on the canvas.</p><label for="fontName" class="slider-label" style="margin-top:14px">FONT NAME</label><input id="fontName" type="text" value="Astral Trash Dings" maxlength="40" style="width:100%;margin-top:6px" autocomplete="off"></div></div></section>
-</div><footer class="footer">DADDY DINGY v1.2 · High-detail TrueType outlines · projects save as JSON · black-and-white glyphs only · no account, no server, no common sense required.</footer>
+</div><footer class="footer">DADDY DINGY v1.3 · Individual SVG and ZIP exports · multicolor SVG originals preserved · TTF monochrome · 0 API cost.</footer>
 <input id="svgFiles" type="file" multiple accept=".svg,image/svg+xml"><input id="projectFile" type="file" accept=".json,application/json"><div class="status" id="status" role="status" aria-live="polite"></div>
 </main>
 <script>
@@ -183,6 +183,91 @@ function renderPreview(){$('testStrip').innerHTML=Array.from($('testText').value
 function render(){renderAssets();renderKeyboard();renderEditor();renderPreview();$('fontName').value=state.fontName;}
 function editSlot(prop,value){const slot=state.slots[state.selectedKey];if(!slot)return;slot[prop]=Number(value);renderKeyboard();renderEditor();renderPreview();saveLocal();}
 async function loadSVGFiles(files){let count=0;for(const file of Array.from(files)){if(!/\.svg$/i.test(file.name)&&file.type!=='image/svg+xml')continue;try{const text=await file.text(),data=svgToContours(text),newId='g'+(++idCounter);state.assets.push({id:newId,name:file.name.replace(/\.svg$/i,''),svg:text,contours:data.contours,box:bbox(data.contours),warnings:data.warnings});count++;}catch(e){toast('Could not import '+file.name+': '+e.message);}}render();saveLocal();if(count)toast('Imported '+count+' SVG'+(count===1?'':'s')+' — select one, then click a key.');}
+
+// ---- Separate vector exports, with original colors where SVGs were imported whole. ----
+function safeDingFileName(name) {
+  return String(name || 'ding').normalize('NFKD')
+    .replace(/[\u0300-\u036f]/g,'').replace(/[^A-Za-z0-9_-]+/g,'-')
+    .replace(/^-+|-+$/g,'').slice(0,64) || 'ding';
+}
+function monochromeGlyphSvg(asset) {
+  const bb=bbox(asset.contours||[]);
+  if(!Number.isFinite(bb.x0)||!Number.isFinite(bb.y0)||bb.w<=0||bb.h<=0)throw Error('Empty vector artwork.');
+  const pad=Math.max(bb.w,bb.h)*0.035 || 1;
+  const f=n=>Number(n.toFixed(3));
+  const d=asset.contours.map(c=>c.points.length<3?'':c.points.map((p,i)=>(i?'L':'M')+f(p.x)+' '+f(p.y)).join(' ')+'Z').filter(Boolean).join(' ');
+  return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="'+[f(bb.x0-pad),f(bb.y0-pad),f(bb.w+2*pad),f(bb.h+2*pad)].join(' ')+'"><path fill="#000" fill-rule="evenodd" d="'+d+'"/></svg>';
+}
+function exportedDingSvg(asset) {
+  // Imported standalone SVGs retain their full-color paint. Sheet-harvested
+  // assets are already separate monochrome vector SVGs generated by the harvester.
+  const original=(asset.svg||'').trim();
+  if(!/^<svg[\s>]/i.test(original))return monochromeGlyphSvg(asset);
+  return original;
+}
+// Dependency-free ZIP32 STORE writer. No CDN, server, or third-party API.
+function packDingSvgZip(items){
+  if(items.length>65535)throw Error('Too many SVGs for one ZIP.');
+  const enc=new TextEncoder(), parts=[], catalog=[];
+  const crcTable=new Uint32Array(256);
+  for(let n=0;n<256;n++){let v=n;for(let k=0;k<8;k++)v=(v&1)?(0xedb88320^(v>>>1)):(v>>>1);crcTable[n]=v>>>0;}
+  function crc32(bytes){let c=0xffffffff;for(const b of bytes)c=crcTable[(c^b)&255]^(c>>>8);return (c^0xffffffff)>>>0;}
+  function bytes(size,fill){const out=new Uint8Array(size);fill(new DataView(out.buffer),out);return out;}
+  let offset=0;
+  for(const {filename,svg} of items){
+    const name=enc.encode(filename),data=enc.encode(svg),crc=crc32(data);
+    if(name.length>65535||data.length>0xffffffff)throw Error('SVG too large for ZIP.');
+    const start=offset;
+    const local=bytes(30+name.length,(d,b)=>{
+      d.setUint32(0,0x04034b50,true);d.setUint16(4,20,true);
+      d.setUint16(6,0x0800,true);d.setUint32(14,crc,true);
+      d.setUint32(18,data.length,true);d.setUint32(22,data.length,true);
+      d.setUint16(26,name.length,true);b.set(name,30);
+    });
+    parts.push(local,data);offset+=local.length+data.length;
+    const entry=bytes(46+name.length,(d,b)=>{
+      d.setUint32(0,0x02014b50,true);d.setUint16(4,20,true);
+      d.setUint16(6,20,true);d.setUint16(8,0x0800,true);
+      d.setUint32(16,crc,true);d.setUint32(20,data.length,true);
+      d.setUint32(24,data.length,true);d.setUint16(28,name.length,true);
+      d.setUint32(42,start,true);b.set(name,46);
+    });
+    catalog.push(entry);
+  }
+  const startCatalog=offset;
+  for(const entry of catalog){parts.push(entry);offset+=entry.length;}
+  if(offset>0xffffffff)throw Error('ZIP too large. Split into smaller batches.');
+  const end=bytes(22,d=>{
+    d.setUint32(0,0x06054b50,true);
+    d.setUint16(8,items.length,true);d.setUint16(10,items.length,true);
+    d.setUint32(12,offset-startCatalog,true);d.setUint32(16,startCatalog,true);
+  });
+  parts.push(end);
+  return new Blob(parts,{type:'application/zip'});
+}
+function exportSelectedDing(){
+  const id=state.activeAsset||state.slots[state.selectedKey]?.id;
+  const asset=state.assets.find(a=>a.id===id);
+  if(!asset){toast('Select an icon in THE PILE or a populated key first.');return;}
+  try{
+    download(exportedDingSvg(asset),safeDingFileName(asset.name)+'.svg','image/svg+xml');
+    toast('Exported '+asset.name+' as SVG.');
+  }catch(e){toast('SVG export failed: '+e.message);}
+}
+function exportAllDings(){
+  if(!state.assets.length){toast('Nothing to export. Import or harvest some icons first.');return;}
+  try{
+    const items=state.assets.map((asset,i)=>({
+      filename:String(i+1).padStart(2,'0')+'-'+safeDingFileName(asset.name)+'.svg',
+      svg:exportedDingSvg(asset)
+    }));
+    download(packDingSvgZip(items),'daddy-dingy-individual-svgs.zip','application/zip');
+    toast('Exported '+items.length+' separate SVGs in one ZIP.');
+  }catch(e){toast('SVG ZIP export failed: '+e.message);}
+}
+$('exportSelectedSVG').onclick=exportSelectedDing;
+$('exportAllSVG').onclick=exportAllDings;
+
 function saveProject(){const data=JSON.stringify({version:1,assets:state.assets.map(a=>({id:a.id,name:a.name,svg:a.svg})),slots:state.slots,fontName:state.fontName},null,2);download(data,(state.fontName||'dingbats').replace(/[^\w-]+/g,'-')+'.glyphgoblin.json','application/json');toast('Editable project saved. Your keys and SVGs are inside.');}
 async function openProject(file){try{const d=JSON.parse(await file.text());if(d.version!==1||!Array.isArray(d.assets)||typeof d.slots!=='object')throw Error('Not a Daddy Dingy project.');const assets=[];for(const a of d.assets){const converted=svgToContours(a.svg);assets.push({id:String(a.id),name:String(a.name),svg:a.svg,contours:converted.contours,box:bbox(converted.contours),warnings:converted.warnings});}
  state.assets=assets;const ids=new Set(assets.map(a=>a.id));state.slots={};for(const [k,s] of Object.entries(d.slots))if(k.length===1&&ids.has(s.id)){state.slots[k]={id:s.id,x:clamp(Number(s.x)||0,-350,350),y:clamp(Number(s.y)||0,-350,350),scale:clamp(Number(s.scale)||100,20,230),rotation:clamp(Number(s.rotation)||0,-180,180)};}
