@@ -9,7 +9,7 @@ page.on("pageerror",error=>errors.push(String(error)));
 page.on("console",message=>{if(message.type()==="error")errors.push(message.text());});
 try{
  await page.goto(url,{waitUntil:"networkidle",timeout:30000});
- await page.locator("#vctPhotoFiles").waitFor({timeout:15000});
+ await page.locator("#vctPhotoFiles").waitFor({state:"attached",timeout:15000});
  assert.match(await page.locator("#drop").innerText(),/PHOTO/i);
  assert.ok(await page.locator("#vctPhotoButton").count(),"direct photo button exists");
  const pngData=await page.evaluate(()=>{
