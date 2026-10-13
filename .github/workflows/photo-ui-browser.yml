@@ -1,0 +1,33 @@
+name: Photo Contact Sheet Browser Smoke
+on:
+  pull_request:
+    paths:
+      - 'color-trace-ui.js'
+      - 'color-trace-engine.js'
+      - 'index.html'
+      - 'tests/photo-ui-browser-smoke.mjs'
+      - '.github/workflows/photo-ui-browser.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  photo-picker:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install project and Playwright Chromium
+        run: |
+          npm install --no-audit --no-fund
+          npm install --no-save playwright
+          npx playwright install chromium --with-deps
+      - name: Start Vite preview server and test iPhone-sized sheet
+        run: |
+          npm run dev -- --port 4173 > /tmp/vite-log.txt 2>&1 &
+          node --input-type=module -e 'let ok=false;for(let i=0;i<50;i++){try{const r=await fetch("http://127.0.0.1:4173/");if(r.ok){ok=true;break}}catch{}await new Promise(r=>setTimeout(r,300))}if(!ok)process.exit(1)'
+          node tests/photo-ui-browser-smoke.mjs
