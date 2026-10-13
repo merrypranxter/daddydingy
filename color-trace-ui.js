@@ -79,6 +79,9 @@ function initColorFoundry(){
   thumbs.replaceChildren();
   const batch=[],base=cleanBase(file.name);
   notify("Tracing "+n+" design"+(n===1?"":"s")+" locally…");
+  // Yield for two paint frames so Safari shows progress before expensive
+  // vector contour tracing begins. This prevents a misleading "nothing happened" UI.
+  await new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)));
   for(let k=0;k<n;k++){
    const col=k%cols,row=Math.floor(k/cols);
    const x0=Math.round(image.naturalWidth*col/cols),x1=Math.round(image.naturalWidth*(col+1)/cols);
@@ -109,7 +112,7 @@ function initColorFoundry(){
      asset=restoreSvgAsset({id,name:base+" · "+label,svg:traced.svg});
    }else{
      const doc=new DOMParser().parseFromString(traced.svg,"image/svg+xml");
-     const view=(doc.documentElement.getAttribute("viewBox")||"0 0 "+w+" "+h).split(/[\\s,]+/).map(Number);
+     const view=(doc.documentElement.getAttribute("viewBox")||"0 0 "+w+" "+h).split(/[\s,]+/).map(Number);
      const [vx,vy,vw,vh]=view.length===4&&view.every(Number.isFinite)?view:[0,0,w,h];
      asset={id,name:base+" · "+label,svg:traced.svg,contours:[],warnings:[],
        colorOnly:true,box:{x0:vx,y0:vy,x1:vx+vw,y1:vy+vh,w:vw,h:vh}};
