@@ -63,9 +63,10 @@ try{
  assert.ok(!(await page.locator("#vctStatus").innerText()).includes("Not a valid SVG"));
  assert.equal(await page.locator("#assetList .svg-tile").count(),12,"dragged JPEG routed once");
 
- assert.equal(await page.locator("#assetList .svg-tile").count(),9,"nine individual color SVG assets in pile");
+ assert.equal(await page.locator("#assetList .svg-tile").count(),12,"9 contact sheet designs and three additional JPEG imports");
  assert.equal(await page.locator("#assetList .svg-tile").first().innerText().then(s=>s.includes("COLOR SVG")),true,"color SVG assets are labeled, not converted into monochrome fonts");
 
+ await page.locator("#vctLayout").selectOption("four");
  assert.equal(await page.locator("#vctLayout").inputValue(),"four","2x2 sheets supported");
  assert.equal(errors.length,0,errors.join("\n"));
  console.log("PASS "+(process.env.PLAYWRIGHT_BROWSER||"chromium")+" iPhone-sized JPEG → nine color SVG assets:",status);
