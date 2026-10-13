@@ -172,12 +172,17 @@ function contourPath(contours){return contours.map(pts=>pts.map((p,i)=>(i?'L':'M
 function miniature(ch){if(ch===' ')return '<span class="sample-char"></span>';
  const slot=state.slots[ch];if(!slot)return `<span class="sample-char missing">${esc(ch)}</span>`;
  const d=contourPath(toGlyph(slot));return `<span class="sample-char"><svg viewBox="0 0 1000 1000" aria-label="${esc(ch)}"><path d="${d}" /></svg></span>`;}
-function renderAssets(){const el=$('assetList');el.innerHTML='';for(const asset of state.assets){const tile=document.createElement('div');tile.setAttribute('role','button');tile.tabIndex=0;tile.className='svg-tile'+(asset.id===state.activeAsset?' active':'');tile.title=asset.name;const data='data:image/svg+xml;charset=utf-8,'+encodeURIComponent(asset.svg);const img=document.createElement('img');img.src=data;img.alt='';const label=document.createElement('span');label.className='name';label.textContent=asset.name;const remove=document.createElement('button');remove.className='remove-icon';remove.title='Remove icon from library and all keys';remove.type='button';remove.textContent='×';remove.onclick=e=>{e.stopPropagation();state.assets=state.assets.filter(a=>a.id!==asset.id);for(const k of Object.keys(state.slots))if(state.slots[k].id===asset.id)delete state.slots[k];if(state.activeAsset===asset.id)state.activeAsset=null;render();saveLocal();};tile.append(img,label);if(asset.warnings.length){const warn=document.createElement('span');warn.className='bad';warn.textContent='⚠ partial import';warn.title=asset.warnings.join(' · ');tile.append(warn);}tile.append(remove);tile.onclick=()=>{state.activeAsset=asset.id;renderAssets();$('keyHint').textContent='Icon armed! Click any key to stamp '+asset.name+' onto it.';toast('Armed: '+asset.name+' · click a keyboard key');};tile.onkeydown=e=>{if(e.target===tile&&(e.key==='Enter'||e.key===' ')){e.preventDefault();tile.click();}};el.append(tile);}if(!state.assets.length)el.innerHTML='<div class="empty" style="grid-column:1/-1">Your icon pile is empty. Feed the goblin some SVGs.</div>';$('assetCount').textContent=state.assets.length+' SVG'+(state.assets.length===1?'':'s');}
+function renderAssets(){const el=$('assetList');el.innerHTML='';for(const asset of state.assets){const tile=document.createElement('div');tile.setAttribute('role','button');tile.tabIndex=0;tile.className='svg-tile'+(asset.id===state.activeAsset?' active':'');tile.title=asset.name;const data='data:image/svg+xml;charset=utf-8,'+encodeURIComponent(asset.svg);const img=document.createElement('img');img.src=data;img.alt='';const label=document.createElement('span');label.className='name';label.textContent=asset.name;const remove=document.createElement('button');remove.className='remove-icon';remove.title='Remove icon from library and all keys';remove.type='button';remove.textContent='×';remove.onclick=e=>{e.stopPropagation();state.assets=state.assets.filter(a=>a.id!==asset.id);for(const k of Object.keys(state.slots))if(state.slots[k].id===asset.id)delete state.slots[k];if(state.activeAsset===asset.id)state.activeAsset=null;render();saveLocal();};tile.append(img,label);if(asset.warnings.length){const warn=document.createElement('span');warn.className='bad';warn.textContent='⚠ partial import';warn.title=asset.warnings.join(' · ');tile.append(warn);}if(!asset.contours.length){const note=document.createElement('span');note.className='bad';note.textContent=' · SVG ONLY';tile.append(note);}tile.append(remove);tile.onclick=()=>{state.activeAsset=asset.id;renderAssets();$('keyHint').textContent='Icon armed! Click any key to stamp '+asset.name+' onto it.';toast('Armed: '+asset.name+' · click a keyboard key');};tile.onkeydown=e=>{if(e.target===tile&&(e.key==='Enter'||e.key===' ')){e.preventDefault();tile.click();}};el.append(tile);}if(!state.assets.length)el.innerHTML='<div class="empty" style="grid-column:1/-1">Your icon pile is empty. Feed the goblin some SVGs.</div>';$('assetCount').textContent=state.assets.length+' SVG'+(state.assets.length===1?'':'s');}
 function renderKeyboard(){let html='';for(const row of rows){html+='<div class="keyrow">';for(const base of row){const ch=displayKey(base,state.shift),sel=ch===state.selectedKey,slot=state.slots[ch];html+=`<button class="key${sel?' selected':''}${slot?' used':''}" type="button" data-key="${esc(ch)}" title="Key ${esc(ch)}"><span class="symbol">${slot?`<svg viewBox="0 0 1000 1000"><path fill="white" d="${contourPath(toGlyph(slot))}" /></svg>`:''}</span><span class="letter">${esc(ch)}</span></button>`;}html+='</div>';}
  const spaceSlot=state.slots[' '];html+=`<div class="keyrow"><button class="key spacerkey${state.selectedKey===' '?' selected':''}${spaceSlot?' used':''}" type="button" data-key=" " title="Space"><span class="symbol">${spaceSlot?`<svg viewBox="0 0 1000 1000"><path d="${contourPath(toGlyph(spaceSlot))}"/></svg>`:''}</span><span class="letter">SPACE</span></button></div>`;
  $('keyboard').innerHTML=html;document.querySelectorAll('[data-key]').forEach(btn=>btn.onclick=()=>pickKey(btn.dataset.key));$('slotCount').textContent=Object.keys(state.slots).length+' keys assigned';$('normalMode').classList.toggle('active',!state.shift);$('shiftMode').classList.toggle('active',state.shift);
 }
-function pickKey(k){state.selectedKey=k;if(state.activeAsset){state.slots[k]={id:state.activeAsset,x:0,y:0,scale:100,rotation:0};state.activeAsset=null;$('keyHint').textContent='Stamped '+keyLabel(k)+'. Select another icon to assign it elsewhere.';saveLocal();}render();}
+function pickKey(k){state.selectedKey=k;if(state.activeAsset){
+  const selected=state.assets.find(a=>a.id===state.activeAsset);
+  if(selected && !selected.contours.length){toast('SVG export is available; this huge glyph cannot be assigned to a TTF key.');render();return;}
+  state.slots[k]={id:state.activeAsset,x:0,y:0,scale:100,rotation:0};state.activeAsset=null;
+  $('keyHint').textContent='Stamped '+keyLabel(k)+'. Select another icon to assign it elsewhere.';saveLocal();
+ }render();}
 function renderEditor(){const k=state.selectedKey,slot=state.slots[k];$('selectedName').textContent='Key: '+keyLabel(k);$('stageGlyph').setAttribute('d',slot?contourPath(toGlyph(slot)):'');$('editorInfo').textContent=slot?'Drag the symbol in the preview, or fine-tune its position below.':'No icon on this key yet. Pick an SVG, then click this key.';for(const name of ['size','x','y','rotation']){$(name).disabled=!slot;const v=slot?(name==='size'?slot.scale:slot[name]):(name==='size'?100:0);$(name).value=v;$(name==='size'?'sizeOut':name==='rotation'?'rotationOut':name+'Out').textContent=v+(name==='size'?'%':name==='rotation'?'°':'');}}
 function renderPreview(){$('testStrip').innerHTML=Array.from($('testText').value).map(miniature).join('')||'<span class="help">Type to preview your dingbats.</span>';}
 function render(){renderAssets();renderKeyboard();renderEditor();renderPreview();$('fontName').value=state.fontName;}
@@ -688,41 +693,66 @@ render();
   })();
   function harvest(regions, forceFill, closeWhenDone=false) {
     if(!current || !regions.length) return;
-    let data;
-    try { data=current.parsed || (current.parsed=svgToContours(current.text,1200000,3)); }
-    catch(e){ toast('Sheet needs simpler SVG outlines: '+e.message);return; }
     const sourceBox=current.view;
-    const minx=sourceBox.x,miny=sourceBox.y,maxx=minx+sourceBox.w,maxy=miny+sourceBox.h;
-    const artwork=data.contours.filter(c=>{
-      const b=bbox([c]);
-      return !(b.w>sourceBox.w*.92 && b.h>sourceBox.h*.92 && b.x0<=minx+sourceBox.w*.05 && b.y0<=miny+sourceBox.h*.05 && b.x1>=maxx-sourceBox.w*.05 && b.y1>=maxy-sourceBox.h*.05);
-    });
-    let imported=0,assigned=0,skipped=0;
-    let next=0;
-    const fill = forceFill || q('shFill').checked;
+    const wantsColor=q('shColor').checked;
+    let artwork=null;
+    // Giant Capture sheets should never have to pass the TTF point cap before
+    // their nine independent color SVGs can be exported.
+    if(!wantsColor){
+      try {
+        const data=current.parsed || (current.parsed=svgToContours(current.text,1200000,3));
+        const minx=sourceBox.x,miny=sourceBox.y,maxx=minx+sourceBox.w,maxy=miny+sourceBox.h;
+        artwork=data.contours.filter(c=>{
+          const b=bbox([c]);
+          return !(b.w>sourceBox.w*.92 && b.h>sourceBox.h*.92 &&
+            b.x0<=minx+sourceBox.w*.05&&b.y0<=miny+sourceBox.h*.05&&
+            b.x1>=maxx-sourceBox.w*.05&&b.y1>=maxy-sourceBox.h*.05);
+        });
+      }catch(e){toast('Font outline conversion failed: '+e.message);return;}
+    }
+    let imported=0,assigned=0,skipped=0,svgOnly=0,next=0;
+    const fill=forceFill||q('shFill').checked;
     for(const region of regions){
-      const selected=artwork.filter(c=>{
-        const b=bbox([c]), x=(b.x0+b.x1)/2,y=(b.y0+b.y1)/2;
-        return x>=region.x && x<=region.x+region.w && y>=region.y && y<=region.y+region.h;
-      });
-      const points=selected.reduce((n,c)=>n+c.points.length,0);
-      if(!points || points>120000){skipped++;continue;}
       try{
-        let svg=makeSVG(selected),colorWarning='';
-        if(q('shColor').checked){try{svg=preserveSheetColor(current.text,region,sourceBox);}catch(e){colorWarning='Color preservation unavailable: '+e.message;}}
+        let svg,contours=[],warnings=[];
+        if(wantsColor){
+          svg=preserveSheetColor(current.text,region,sourceBox);
+          // Each separated SVG is vastly smaller than the source sheet.
+          // Fonts can convert it independently; if too complex, still preserve
+          // this asset for SVG export rather than silently losing the ding.
+          try{
+            const result=svgToContours(svg,120000,2);
+            contours=result.contours;
+            warnings.push(...result.warnings);
+          }catch(e){
+            warnings.push('SVG export only — too complex for TTF: '+e.message);
+            svgOnly++;
+          }
+        }else{
+          contours=artwork.filter(c=>{
+            const b=bbox([c]),x=(b.x0+b.x1)/2,y=(b.y0+b.y1)/2;
+            return x>=region.x&&x<=region.x+region.w&&y>=region.y&&y<=region.y+region.h;
+          });
+          const count=contours.reduce((n,c)=>n+c.points.length,0);
+          if(!count||count>120000){skipped++;continue;}
+          svg=makeSVG(contours);
+        }
+        const result=optimizedDing({svg,contours});
+        // Storing already compact paths prevents giant projects and ZIP exports.
+        // Does not reduce source anchor count; doesn't destroy color data.
+        svg=result.svg;
         const name=current.file.name.replace(/\.svg$/i,'')+' · '+String(imported+1).padStart(2,'0');
         const id='g'+(++idCounter);
-        state.assets.push({id,name,svg,contours:selected,box:bbox(selected),warnings:colorWarning?[colorWarning]:[]});
+        const box=contours.length?bbox(contours):{x0:region.x,y0:region.y,x1:region.x+region.w,y1:region.y+region.h,w:region.w,h:region.h};
+        state.assets.push({id,name,svg,contours,box,warnings});
         imported++;
-        if(fill){
-          while(next<keySequence.length && state.slots[keySequence[next]])next++;
-          if(next<keySequence.length){
-            state.slots[keySequence[next++]]={id,x:0,y:0,scale:100,rotation:0};
-            assigned++;
-          }
+        if(fill&&contours.length){
+          while(next<keySequence.length&&state.slots[keySequence[next]])next++;
+          if(next<keySequence.length){state.slots[keySequence[next++]]={id,x:0,y:0,scale:100,rotation:0};assigned++;}
         }
-      }catch(e){console.warn('Skipped a glyph',e);skipped++;}
+      }catch(e){console.warn('Skipped an SVG cell',e);skipped++;}
     }
+    if(svgOnly)toast(svgOnly+' complex dings kept for color SVG export (not font).');
     state.activeAsset=null;
     render();saveLocal();
     toast(imported+' vector dings harvested · '+assigned+' keyboard keys filled'+(skipped?' · '+skipped+' skipped':'')+'.');
