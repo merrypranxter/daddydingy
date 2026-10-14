@@ -10,6 +10,15 @@ page.on("pageerror",error=>errors.push(String(error)));
 page.on("console",message=>{if(message.type()==="error")errors.push(message.text());});
 try{
  await page.goto(url,{waitUntil:"networkidle",timeout:30000});
+ // This must be a real Vite production build, not the dev server.
+ // The dev server masked the missing tracer JS that caused iPhone failure.
+ for(const path of ["/color-trace-engine.js","/color-trace-ui.js"]){
+   const response=await page.request.get(new URL(path,url).href);
+   assert.equal(response.status(),200,path+" must be shipped with Netlify dist");
+   const body=await response.text();
+   assert.match(body,/Daddy Dingy|DaddyDingyTraceColors/,path+" must contain JavaScript, not fallback HTML");
+ }
+ await page.waitForFunction(()=>window.dingyFoundryReady===true&&typeof window.dingyImportRasterArtwork==="function",null,{timeout:15000});
  await page.locator("#vctPhotoFiles").waitFor({state:"attached",timeout:15000});
  assert.match(await page.locator("#drop").innerText(),/PHOTO/i);
  assert.ok(await page.locator("#vctPhotoButton").count(),"direct photo button exists");
