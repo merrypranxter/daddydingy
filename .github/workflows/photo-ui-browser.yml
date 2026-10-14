@@ -26,9 +26,10 @@ jobs:
           npm install --no-audit --no-fund
           npm install --no-save playwright
           npx playwright install chromium webkit --with-deps
-      - name: Test iPhone-sized JPEG in Chromium and Safari WebKit
+      - name: Test production build in Chromium and Safari WebKit
         run: |
-          npm run dev -- --port 4173 > /tmp/vite-log.txt 2>&1 &
+          npm run build
+          npm run preview -- --port 4173 > /tmp/vite-log.txt 2>&1 &
           node --input-type=module -e 'let ok=false;for(let i=0;i<50;i++){try{const r=await fetch("http://127.0.0.1:4173/");if(r.ok){ok=true;break}}catch{}await new Promise(r=>setTimeout(r,300))}if(!ok)process.exit(1)'
           node tests/photo-ui-browser-smoke.mjs
           PLAYWRIGHT_BROWSER=webkit node tests/photo-ui-browser-smoke.mjs
